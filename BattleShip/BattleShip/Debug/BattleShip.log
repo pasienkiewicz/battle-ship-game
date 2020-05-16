@@ -1,0 +1,3 @@
+﻿  Player.cpp
+C:\Users\Patryk\source\repos\BattleShip\BattleShip\Player.cpp(148): warning C4715: 'Player::checkDirection': not all control paths return a value
+  BattleShip.vcxproj -> C:\Users\Patryk\source\repos\BattleShip\Debug\BattleShip.exe
