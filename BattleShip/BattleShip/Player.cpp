@@ -7,7 +7,6 @@ Player::Player()
     shipsType[2] = "Destroyer (space 3): ";
     shipsType[3] = "Submarine (space 3): ";
     shipsType[4] = "Patrol Boat (space 2): ";
-    spawnShip();
 }
 
 void Player::spawnShip()
@@ -58,10 +57,10 @@ void Player::spawnShip()
     }        
 }
 
-bool Player::attack(Ships& oponentShip)
+bool Player::attack(Ships& ai)
 {
     string a;
-    drawTwoBoards();
+    drawTwoBoards(ai);
     while (true)
     {
         cout << "Shot koordinate. Ex. 1A: ";
@@ -73,14 +72,19 @@ bool Player::attack(Ships& oponentShip)
         {
             if (checkShotGrid(y,x))
             {
-                if (checkIfShip(y, x, oponentShip))
+                if (checkIfShip(y, x, ai))
                 {
                     shotgrid[y][x] = '$';
-                    oponentShip.setChar(y, x);
+                    ai.setHitChar(y, x);
+                    if (ai.checkIfSink())
+                        displayInfo("Player " + name +": oponent ship sink");
+                    else
+                        displayInfo("Player " + name + ": oponent ship hit");
                     return true;
                 }
                 else
                 {
+                    displayInfo("Player " + name + ": miss");
                     shotgrid[y][x] = 'X';
                     return false;
                 }
@@ -98,7 +102,6 @@ bool Player::attack(Ships& oponentShip)
             cout << "Press \"enter\" key to input new koordinates...";
             cin.get();
         }
-
     }
 }
 

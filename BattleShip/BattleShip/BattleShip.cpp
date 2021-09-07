@@ -2,8 +2,9 @@
 #include "Board.h"
 #include "Player.h"
 #include "Computer.h"
-#include <Windows.h>
 #include <time.h>
+#include <chrono>
+#include <thread>
 
 
 int main() 
@@ -17,39 +18,27 @@ int main()
 	{
 		while(gamer.attack(ai))
 		{
-			if (ai.checkIfSink())
-			{
-				gamer.info1= "Oponent ship sinked";
-			}
-			else
-			{
-				gamer.info1= "Oponent ship hited";
-			}
 			if (ai.checkLost())
 			{
-				gamer.info1= "You have won";
-				gamer.drawTwoBoards();
+				gamer.drawTwoBoards(ai, "Player " + gamer.name + "Have won");
 				return 0;
 			}
 		}
-		gamer.info1 = "Oponent ship missed";
-		if(ai.attack(gamer))
+		gamer.drawTwoBoards(ai);
+		while(ai.attack(gamer))
 		{
-			if (gamer.checkIfSink)
-			{
-				gamer.info2 = "Oponent ship sinked";
-				ai.state = 0;
-			}
-			else
-			{
-				gamer.info2 = "Oponent ship hited";
-			}
+			this_thread::sleep_for(chrono::seconds(2));
+
 			if (gamer.checkLost())
 			{
-				gamer.info2 = "You have lost";
+				gamer.drawTwoBoards(ai, "Computer " + ai.name + ": Have won");
+				return 0;
 			}
+			gamer.drawTwoBoards(ai);
 			
 		}
+		this_thread::sleep_for(chrono::seconds(2));
+		gamer.drawTwoBoards(ai);
 
 	}
 	

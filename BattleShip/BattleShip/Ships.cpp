@@ -2,7 +2,6 @@
 
 Ships::Ships()
 {
-	numberOfShips = TotalnumberOfShips;
 	shipSize[0] = 5;
 	shipSize[1] = 4;
 	shipSize[2] = 3;
@@ -21,10 +20,15 @@ char Ships::getAttackedChar(int y, int x)
 	return shipgrid[0][y][x];
 }
 
-void Ships::setChar(int y, int x)
+void Ships::setHitChar(int y, int x)
 {
 	shipgrid[0][y][x] = '$';
 	shipgrid[1][y][x] = ' ';
+}
+
+void Ships::setMissChar(int y, int x)
+{
+	shipgrid[0][y][x] = 'X';
 }
 
 bool Ships::checkIfSink()
@@ -37,10 +41,16 @@ bool Ships::checkIfSink()
 			newset.insert(shipgrid[1][i][j]);
 		}
 	}
-	if (newset.size() <= numberOfShips)
+	auto it = newset.find(' ');
+	newset.erase(it);
+	if (newset.size() < numberOfShips)
 	{
-		return true;
 		numberOfShips = newset.size();
+		numberOfShipTypes.clear();
+		for (auto elem : newset) {
+			numberOfShipTypes.push_back(elem);
+		}
+		return true;		
 	}
 	else
 		return false;
@@ -59,7 +69,7 @@ void Ships::automaticShipSpawn()
 {
 	bool direction = 0;
 	int x, y;
-	for (int i = 0; i < TotalnumberOfShips; i++)
+	for (int i = 0; i < numberOfShips; i++)
 	{
 		while (true)
 		{
@@ -86,6 +96,7 @@ void Ships::automaticShipSpawn()
 	}
 }
 
+
 bool Ships::checkShotGrid(int y, int x)
 {
 	return !(shotgrid[y][x] == 'X') && !(shotgrid[y][x] == '$');
@@ -103,8 +114,19 @@ void Ships::setShip(int y, int x, bool direction, int shipSize, char shipType)
 	{
 		for (int j = x; j <= x + goesRight; j++)
 		{
+			if (advancedShipSpawn) {
+				if (x - 1 != -1)
+					spawngrid[i - 1][j] = 'O';
+				if (y - 1 != -1)
+					spawngrid[i][j-1] = 'O';
+				if (x + 1 != 10)
+					spawngrid[i + 1][j] = 'O';
+				if (y + 1 != 10)
+					spawngrid[i][j + 1] = 'O';
+			}
 			shipgrid[0][i][j] = 'O';
 			shipgrid[1][i][j] = shipType;
+			shipgrid[2][i][j] = shipType;
 		}
 	}
 }
@@ -133,7 +155,10 @@ bool Ships::checkOverlap(int y, int x, bool direction, int shipSize)
 	{
 		for (int j = x; j <= x + goesRight; j++)
 		{
-			if (shipgrid[0][i][j] == 'O')
+			if (advancedShipSpawn) {
+				if(spawngrid[i][j] == 'O')
+					return 0;
+			} else if (shipgrid[0][i][j] == 'O')
 				return 0;
 		}
 	}

@@ -2,34 +2,46 @@
 
 Computer::Computer()
 	:
-	state(0),
-	step(0)
+	attackStage(0)
 {
-	name = "Computer";
 	shipSize[0] = 5;
 	shipSize[1] = 4;
 	shipSize[2] = 3;
 	shipSize[3] = 3;
 	shipSize[4] = 2;
-	automaticShipSpawn();
 }
 
 bool Computer::attack(Ships& gamer)
 {
-	if (state == 0)
+	if (attackStage == 0)
 	{
 		while (true)
 		{
-			y = rand() % getcolumns();
-			x = rand() % getrows();
+			if (advancedAtack) {
+				y = rand() % getcolumns();
+				x = rand() % getrows();
+				if ((y+x) % 2 != 0)
+					continue;
+			}
+			else {
+				y = rand() % getcolumns();
+				x = rand() % getrows();
+			}
 
 			if (checkShotGrid(y, x))
 			{
 				if (checkIfShip(y, x, gamer))
 				{
 					shotgrid[y][x] = '$';
-					gamer.setChar(y, x);
-					state++;
+					gamer.setHitChar(y, x);
+					if (gamer.checkIfSink()) {
+						gamer.displayInfo("Computer " + name + ": oponent ship sink");
+						attackStage = 0;
+						continueAttack = false;
+						return true;
+					}
+					gamer.displayInfo("Computer " + name + ": oponent ship hit");
+					attackStage++;
 					x2 = x;
 					y2 = y;
 					return true;
@@ -37,125 +49,214 @@ bool Computer::attack(Ships& gamer)
 				}
 				else
 				{
+					gamer.setMissChar(y, x);
 					shotgrid[y][x] = 'X';
+					gamer.displayInfo("Computer " + name + ": miss");
 					//sentence over here
 					return false;
 				}
 			}
 		}
 	}
-	else if (state == 1)
+	else if (attackStage == 1)
 	{
-		if (x2 + 1 == getrows()&&step==0)
+		if (x2 + 1 == getrows()&&!continueAttack)
 		{
-			state++;
+			attackStage++;
 			x2 = x;
 			return attack(gamer);
 		}
-		else if (x2 + 1 == getrows() && step > 0)
+		else if (x2 + 1 == getrows() && continueAttack)
 		{
-			state += 2;
+			attackStage += 2;
 			x2 = x;
 			return attack(gamer);
 		}
 		else
 		{
-			if (checkIfShip(y2, x2 + 1, gamer))
+			if (!checkShotGrid(y2, x2 + 1)) {
+				if (continueAttack) {
+					attackStage += 2;
+				}
+				else
+					attackStage++;
+				x2 = x;
+				return attack(gamer);
+			}
+			else if (checkIfShip(y2, x2 + 1, gamer))
 			{
 				shotgrid[y2][x2 + 1] = '$';
-				gamer.setChar(y, x2 + 1);
+				gamer.setHitChar(y2, x2 + 1);
+				if (gamer.checkIfSink()) {
+					gamer.displayInfo("Computer " + name + ": oponent ship sink");
+					attackStage = 0;
+					continueAttack = false;
+					return true;
+				}
+				gamer.displayInfo("Computer " + name + ": oponent ship hit");
 				x2 += 1;
-				step++;
+				continueAttack = true;
 				return true;
 			}
 			else
 			{
 				shotgrid[y2][x2 + 1] = 'X';
-				state++;
+				gamer.setMissChar(y2, x2 + 1);
+				gamer.displayInfo("Computer " + name + ": miss");
+				if (continueAttack) {
+					attackStage += 2;
+				} else
+					attackStage++;
 				x2 = x;
 				return false;
 			}
 		}
 	}
-	else if (state == 2)
+	else if (attackStage == 2)
 	{
-		if (y2 + 1 == getcolumns() && step == 0)
+		if (y2 + 1 == getcolumns() &&!continueAttack)
 		{
-			state++;
+			attackStage++;
 			y2 = y;
 			return attack(gamer);
 		}
-		else if (y2 + 1 == getcolumns() && step > 0)
+		else if (y2 + 1 == getcolumns() && continueAttack)
 		{
-			state += 2;
+			attackStage += 2;
 			y2 = y;
 			return attack(gamer);
 		}
 		else
 		{
-			if (checkIfShip(y2 + 1, x2, gamer))
+			if (!checkShotGrid(y2 + 1, x2)) {
+				if (continueAttack) {
+					attackStage += 2;
+				}
+				else
+					attackStage++;
+				y2 = y;
+				return attack(gamer);
+			}
+			else if (checkIfShip(y2 + 1, x2, gamer))
 			{
 				shotgrid[y2 + 1][x2] = '$';
-				gamer.setChar(y2 + 1, x2);
+				gamer.setHitChar(y2 + 1, x2);
+				if (gamer.checkIfSink()) {
+					gamer.displayInfo("Computer " + name + ": oponent ship sink");
+					attackStage = 0;
+					continueAttack = false;
+					return true;
+				}
+				gamer.displayInfo("Computer " + name + ": oponent ship hit");
 				y2 += 1;
-				step++;
+				continueAttack = true;
 				return true;
 			}
 			else
 			{
-				shotgrid[y2][x2 + 1] = 'X';
-				state++;
+				shotgrid[y2 + 1][x2] = 'X';
+				gamer.setMissChar(y2 + 1, x2);
+				gamer.displayInfo("Computer " + name + ": miss");
+				if (continueAttack) {
+					attackStage += 2;
+				}
+				else
+					attackStage++;
 				y2 = y;
 				return false;
 			}
 		}
 	}
-	else if (state == 3)
+	else if (attackStage == 3)
 	{
-		if (x2 - 1 == -1 && step == 0)
+		if (x2 - 1 == -1 && !continueAttack)
 		{
-			state++;
+			attackStage++;
+			x2 = x;
+			return attack(gamer);
+		}
+		else if (x2 - 1 == -1 && continueAttack)
+		{
+			attackStage = 0;
 			x2 = x;
 			return attack(gamer);
 		}
 		else
 		{
-			if (checkIfShip(y2, x2 - 1, gamer))
+			if (!checkShotGrid(y2, x2 - 1)) {
+				if (continueAttack) {
+					attackStage = 0;
+				}
+				else
+					attackStage++;
+				x2 = x;
+				return attack(gamer);
+			}
+			else if (checkIfShip(y2, x2 - 1, gamer))
 			{
 				shotgrid[y2][x2 - 1] = '$';
-				gamer.setChar(y, x2 - 1);
+				gamer.setHitChar(y2, x2 - 1);
+				if (gamer.checkIfSink()) {
+					gamer.displayInfo("Computer " + name + ": oponent ship sink");
+					attackStage = 0;
+					continueAttack = false;
+					return true;
+				}
+				gamer.displayInfo("Computer " + name + ": oponent ship hit");
 				x2 -= 1;
 				return true;
 			}
 			else
 			{
 				shotgrid[y2][x2 - 1] = 'X';
-				state++;
+				gamer.setMissChar(y2, x2 - 1);
+				gamer.displayInfo("Computer " + name + ": miss");
+				if (continueAttack) {
+					attackStage = 0;
+					continueAttack = false;
+				}
+				else
+					attackStage++;
 				x2 = x;
 				return false;
 			}
 		}
 	}
-	else if (state == 4)
+	else if (attackStage == 4)
 	{
+		continueAttack = false;
 		if (y2 - 1 == -1)
 		{
-			state = 0;
+			attackStage = 0;
 			return attack(gamer);
 		}
 		else
 		{
-			if (checkIfShip(y2 - 1, x2, gamer))
+			if (!checkShotGrid(y2 - 1, x2)) {
+				attackStage = 0;
+				y2 = y;
+				return attack(gamer);
+			}
+			else if (checkIfShip(y2 - 1, x2, gamer))
 			{
 				shotgrid[y2 - 1][x2] = '$';
-				gamer.setChar(y2 - 1, x2);
+				gamer.setHitChar(y2 - 1, x2);
+				if (gamer.checkIfSink()) {
+					gamer.displayInfo("Computer " + name + ": oponent ship sink");
+					attackStage = 0;
+					continueAttack = false;
+					return true;
+				}
+				gamer.displayInfo("Computer " + name + ": oponent ship hit");
 				y2 -= 1;
 				return true;
 			}
 			else
 			{
-				shotgrid[y2][x2 + 1] = 'X';
-				state=0;
+				shotgrid[y2 - 1][x2] = 'X';
+				gamer.setMissChar(y2 - 1, x2);
+				gamer.displayInfo("Computer " + name + ": miss");
+				attackStage = 0;
 				y2 = y;
 				return false;
 			}

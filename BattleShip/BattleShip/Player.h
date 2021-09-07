@@ -8,6 +8,8 @@ public:
 	Player();
 	//acess point
 	bool attack(Ships& oponentShip);
+public:		//options
+	string name = "X";
 private:
 	//methods whith diferent classes
 private:

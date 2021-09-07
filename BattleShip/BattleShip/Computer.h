@@ -7,12 +7,15 @@ public:
 	//konstructor
 	Computer();
 	//acess point
-	int state;
-	bool attack(Ships& gamer);
+	bool attack(Ships& gamer);	
+public:		//options
+	bool advancedAtack = true;
 private:
 	bool inicialRecursion(Ships& gamer);
 private:
-	int step;
+	bool continueAttack;
+	int attackStage;
+
 	int x, y, x2, y2;
 	bool downright;
 
