@@ -9,9 +9,7 @@ public:
 	//acess point
 	bool attack(Ships& gamer);	
 public:		//options
-	bool advancedAtack = true;
-private:
-	bool inicialRecursion(Ships& gamer);
+	bool advancedAttack = false;
 private:
 	bool continueAttack;
 	int attackStage;

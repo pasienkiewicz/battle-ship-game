@@ -8,12 +8,12 @@ public:
 	Player();
 	//acess point
 	bool attack(Ships& oponentShip);
+	void spawnShip();
 public:		//options
 	string name = "X";
 private:
 	//methods whith diferent classes
 private:
-	void spawnShip();
 	void convertCoordinates(string a, string b);
 	void convertCoordinates(string a);
 	bool checkDoubleCoordinates();

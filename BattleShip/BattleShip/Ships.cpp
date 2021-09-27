@@ -115,13 +115,13 @@ void Ships::setShip(int y, int x, bool direction, int shipSize, char shipType)
 		for (int j = x; j <= x + goesRight; j++)
 		{
 			if (advancedShipSpawn) {
-				if (x - 1 != -1)
-					spawngrid[i - 1][j] = 'O';
 				if (y - 1 != -1)
-					spawngrid[i][j-1] = 'O';
-				if (x + 1 != 10)
-					spawngrid[i + 1][j] = 'O';
+					spawngrid[i - 1][j] = 'O';
+				if (x - 1 != -1)
+					spawngrid[i][j - 1] = 'O';
 				if (y + 1 != 10)
+					spawngrid[i + 1][j] = 'O';
+				if (x + 1 != 10)
 					spawngrid[i][j + 1] = 'O';
 			}
 			shipgrid[0][i][j] = 'O';

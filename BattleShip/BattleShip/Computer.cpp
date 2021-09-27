@@ -17,7 +17,7 @@ bool Computer::attack(Ships& gamer)
 	{
 		while (true)
 		{
-			if (advancedAtack) {
+			if (advancedAttack) {
 				y = rand() % getcolumns();
 				x = rand() % getrows();
 				if ((y+x) % 2 != 0)
@@ -262,15 +262,4 @@ bool Computer::attack(Ships& gamer)
 			}
 		}
 	}
-}
-	
-bool Computer::inicialRecursion(Ships& gamer)
-{
-	if (!(shotgrid[y][x + 1] == 'X'))
-	{
-		if (checkIfShip(y, x, gamer))
-		{
-		}
-	}
-	return false;
 }

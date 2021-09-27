@@ -1,6 +1,9 @@
 ﻿  BattleShip.cpp
 C:\Users\patry\source\repos\Skyferix\BattleShip\BattleShip\BattleShip\BattleShip.cpp(13,12): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
-  Board.cpp
-C:\Users\patry\source\repos\Skyferix\BattleShip\BattleShip\BattleShip\Board.cpp(22,9): warning C4101: 'temp': unreferenced local variable
+C:\Users\patry\source\repos\Skyferix\BattleShip\BattleShip\BattleShip\BattleShip.cpp(40,37): warning C4553: '==': result of expression not used; did you intend '='?
+  Computer.cpp
+  Player.cpp
   Generating Code...
+C:\Users\patry\source\repos\Skyferix\BattleShip\BattleShip\BattleShip\Player.cpp(154): warning C4715: 'Player::checkDirection': not all control paths return a value
+C:\Users\patry\source\repos\Skyferix\BattleShip\BattleShip\BattleShip\Computer.cpp(265): warning C4715: 'Computer::attack': not all control paths return a value
   BattleShip.vcxproj -> C:\Users\patry\source\repos\Skyferix\BattleShip\BattleShip\x64\Debug\BattleShip.exe

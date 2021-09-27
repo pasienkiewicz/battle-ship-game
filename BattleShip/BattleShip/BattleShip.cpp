@@ -13,7 +13,47 @@ int main()
 	srand(time(NULL));
 	Player gamer;
 	Computer ai;
-	
+	string temp;
+
+	cout << "Do you want to give a name to Computer? (y/n): ";
+	cin >> temp;
+	if (temp == "y") {
+		cout << "Name: ";
+		cin >> temp;
+		ai.name = temp;
+	}
+
+	cout << "Do you want to give a name to Player? (y/n): ";
+	cin >> temp;
+	if (temp == "y") {
+		cout << "Name: ";
+		cin >> temp;
+		gamer.name = temp;
+	}
+		
+	cout << "Do you want to Computer ships to be placed in advanced way with spaces? (y/n): ";
+	cin >> temp;
+	if (temp == "y") ai.advancedShipSpawn = true;
+
+	cout << "Do you want to Computer to attack in advanced way? (y/n): ";
+	cin >> temp;
+	if (temp == "y") ai.advancedAttack == true;
+
+	ai.automaticShipSpawn();
+
+	cout << "Do you want to your to be placed randomly? (y/n): ";
+	cin >> temp;
+	if (temp == "y") {
+		cout << "Do you want to your ship be placed in advanced way with spaces? (y/n): ";
+		cin >> temp;
+		if (temp == "y") {
+			gamer.advancedShipSpawn = true;
+		}
+		gamer.automaticShipSpawn();
+	}
+	else
+		gamer.spawnShip();
+
 	while (true)
 	{
 		while(gamer.attack(ai))
