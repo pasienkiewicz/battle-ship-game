@@ -45,14 +45,12 @@ bool Computer::attack(Ships& gamer)
 					x2 = x;
 					y2 = y;
 					return true;
-					//Sentence over here
 				}
 				else
 				{
 					gamer.setMissChar(y, x);
 					shotgrid[y][x] = 'X';
 					gamer.displayInfo("Computer " + name + ": miss");
-					//sentence over here
 					return false;
 				}
 			}
@@ -262,4 +260,6 @@ bool Computer::attack(Ships& gamer)
 			}
 		}
 	}
+
+	throw invalid_argument("Invalid attack stage");
 }

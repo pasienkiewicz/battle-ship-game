@@ -43,7 +43,7 @@ bool Ships::checkIfSink()
 	}
 	auto it = newset.find(' ');
 	newset.erase(it);
-	if (newset.size() < numberOfShips)
+	if (newset.size() < static_cast<std::set<char>::size_type>(numberOfShips))
 	{
 		numberOfShips = newset.size();
 		numberOfShipTypes.clear();

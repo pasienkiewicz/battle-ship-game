@@ -1,4 +1,6 @@
 #include "Board.h"
+#include "IO.h"
+
 void Board::displayInfo(string message)
 {
 	if (infoCounter == 12) {
@@ -9,9 +11,10 @@ void Board::displayInfo(string message)
 	info[infoCounter] = message;
 	infoCounter++;
 }
+
 void Board::drawTwoBoards(Board& ai, string message)
 {
-	system("CLS");
+	IO::clearScreen();
 	cout << "	 Ship Grid			  Attack Grid		" << info[0] << endl;
 	cout << "    |A|B|C|D|E|F|G|H|I|J|	     |A|B|C|D|E|F|G|H|I|J|	" << info[1] << endl;
 	for (int i = 0; i < columns; i++)
@@ -19,22 +22,20 @@ void Board::drawTwoBoards(Board& ai, string message)
 		cout << "  " << i <<" ";
 		for (int j = 0; j < rows; j++)
 		{
-			char temp;
-			
 			if (j + 1 != rows)
 			{
-				setDefaultColor();
+				IO::resetColor();
 				cout << "|"; 
 				setShipGridColor(i, j);
 				cout << shipgrid[0][i][j];
 			}
 			else
 			{
-				setDefaultColor();
+				IO::resetColor();
 				cout << "|";
 				setShipGridColor(i, j);
 				cout << shipgrid[0][i][j];
-				setDefaultColor();
+				IO::resetColor();
 				cout << "|";
 			}
 		}
@@ -43,18 +44,18 @@ void Board::drawTwoBoards(Board& ai, string message)
 		{
 			if (j + 1 != rows)
 			{
-				setDefaultColor();
+				IO::resetColor();
 				cout << "|";
 				setShotGridColor(ai, i, j);
 				cout << shotgrid[i][j];
 			}
 			else
 			{
-				setDefaultColor();
+				IO::resetColor();
 				cout << "|";
 				setShotGridColor(ai, i, j);
 				cout << shotgrid[i][j];
-				setDefaultColor();
+				IO::resetColor();
 				cout << "|";
 			}
 		}
@@ -64,17 +65,17 @@ void Board::drawTwoBoards(Board& ai, string message)
 	cout << endl;
 	Board::legend();
 	if (!message.empty()) {
-		SetConsoleTextAttribute(Console, 10);
+		IO::setGreen();
 		cout << endl;
 		cout << message;
 		cout << endl;
-		setDefaultColor();
+		IO::resetColor();
 	}
 }
 
 void Board::drawSigleBoard()
 {
-	system("CLS");
+	IO::clearScreen();
 	cout << endl;
 	cout << "	  Ship Grid" << endl;
 	cout << "    |A|B|C|D|E|F|G|H|I|J|" << endl;
@@ -114,65 +115,50 @@ void Board::arrayClean()
 
 }
 
-void Board::legend()
-{
-	cout << " ---Legend---" << endl;
-	SetConsoleTextAttribute(Console, 10);
-	cout << " O ";
-	setDefaultColor();
-	cout << "ship" << endl;
-	SetConsoleTextAttribute(Console, 6);
-	cout << " $ ";
-	setDefaultColor();
-	cout << "hited ship" << endl;
-	SetConsoleTextAttribute(Console, 4);
-	cout << " $ ";
-	setDefaultColor();
-	cout << "sinked ship" << endl;
-	SetConsoleTextAttribute(Console, 14);
-	cout << " X ";
-	setDefaultColor();
-	cout << "missed atack" << endl;
+void Board::legend() {
+    std::cout << " ---Legend---" << std::endl;
+    IO::setGreen();
+    std::cout << " O ";
+    IO::resetColor();
+    std::cout << "ship" << std::endl;
+    IO::setYellow();
+    std::cout << " $ ";
+    IO::resetColor();
+    std::cout << "hit ship" << std::endl;
+    IO::setRed();
+    std::cout << " $ ";
+    IO::resetColor();
+    std::cout << "sunk ship" << std::endl;
+    IO::setYellow();
+    std::cout << " X ";
+    IO::resetColor();
+    std::cout << "missed attack" << std::endl;
 }
 
-void Board::setShipGridColor(int i, int j)
-{
-	if (shipgrid[0][i][j] == '$' && count(numberOfShipTypes.begin(), numberOfShipTypes.end(), shipgrid[2][i][j]) == 0) {
-		SetConsoleTextAttribute(Console, 4);
-	}
-	else if (shipgrid[0][i][j] == '$') {
-		SetConsoleTextAttribute(Console, 6);
-	}
-	else if (shipgrid[0][i][j] == 'O') {
-		SetConsoleTextAttribute(Console, 10);
-	}
-	else if (shipgrid[0][i][j] == 'X') {
-		SetConsoleTextAttribute(Console, 14);
-	}
-	else {
-		SetConsoleTextAttribute(Console, 7);
-	}
+void Board::setShipGridColor(int i, int j) {
+    if (shipgrid[0][i][j] == '$' && count(numberOfShipTypes.begin(), numberOfShipTypes.end(), shipgrid[2][i][j]) == 0) {
+        IO::setRed();
+    } else if (shipgrid[0][i][j] == '$') {
+        IO::setYellow();
+    } else if (shipgrid[0][i][j] == 'O') {
+        IO::setGreen();
+    } else if (shipgrid[0][i][j] == 'X') {
+        IO::setYellow();
+    } else {
+        IO::resetColor();
+    }
 }
 
-void Board::setShotGridColor(Board& ai, int i, int j)
-{
-	if (shotgrid[i][j] == '$' && count(ai.numberOfShipTypes.begin(), ai.numberOfShipTypes.end(), ai.shipgrid[2][i][j]) == 0) {
-		SetConsoleTextAttribute(Console, 4);
-	}
-	else if (shotgrid[i][j] == '$') {
-		SetConsoleTextAttribute(Console, 6);
-	}
-	else if (shotgrid[i][j] == 'X') {
-		SetConsoleTextAttribute(Console, 14);
-	}
-	else {
-		SetConsoleTextAttribute(Console, 7);
-	}
-}
-
-void Board::setDefaultColor()
-{
-	SetConsoleTextAttribute(Console, 7);
+void Board::setShotGridColor(Board& ai, int i, int j) {
+    if (shotgrid[i][j] == '$' && count(ai.numberOfShipTypes.begin(), ai.numberOfShipTypes.end(), ai.shipgrid[2][i][j]) == 0) {
+        IO::setRed();
+    } else if (shotgrid[i][j] == '$') {
+        IO::setYellow();
+    } else if (shotgrid[i][j] == 'X') {
+        IO::setYellow();
+    } else {
+        IO::resetColor();
+    }
 }
 
 int Board::getrows()
@@ -184,7 +170,3 @@ int Board::getcolumns()
 {
 	return columns;
 }
-
-
-
-

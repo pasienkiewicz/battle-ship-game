@@ -2,7 +2,6 @@
 #include <iostream>
 #include <vector>
 #include <algorithm>
-#include <Windows.h>
 
 using namespace std;
 class Board
@@ -29,9 +28,7 @@ private:
 	void legend();
 	void setShipGridColor(int i, int j);
 	void setShotGridColor(Board& ai, int i, int j);
-	void setDefaultColor();
 private:
-	HANDLE Console = GetStdHandle(STD_OUTPUT_HANDLE);
 	const int rows = 10;
 	const int columns = 10;
 	int infoCounter = 0;

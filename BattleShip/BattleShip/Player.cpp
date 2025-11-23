@@ -148,9 +148,11 @@ bool Player::checkSize(int shipSize)
 bool Player::checkDirection()
 {
     if (x == x2)
-        return 0;
+        return false;
     if (y == y2)
-        return 1;
+        return true;
+    
+    throw invalid_argument("Invalid direction");
 }
 
 int Player::encript(char a)

@@ -37,7 +37,7 @@ int main()
 
 	cout << "Do you want to Computer to attack in advanced way? (y/n): ";
 	cin >> temp;
-	if (temp == "y") ai.advancedAttack == true;
+	if (temp == "y") ai.advancedAttack = true;
 
 	ai.automaticShipSpawn();
 
