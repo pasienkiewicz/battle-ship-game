@@ -131,7 +131,7 @@ void Board::legend()
 	std::cout << " $ ";
 	IO::resetColor();
 	std::cout << "sunk ship" << std::endl;
-	IO::setYellow();
+	IO::setCyan();
 	std::cout << " X ";
 	IO::resetColor();
 	std::cout << "missed attack" << std::endl;
@@ -153,7 +153,7 @@ void Board::setShipGridColor(int i, int j)
 	}
 	else if (shipgrid[0][i][j] == 'X')
 	{
-		IO::setYellow();
+		IO::setCyan();
 	}
 	else
 	{
@@ -173,7 +173,7 @@ void Board::setShotGridColor(Board &ai, int i, int j)
 	}
 	else if (shotgrid[i][j] == 'X')
 	{
-		IO::setYellow();
+		IO::setCyan();
 	}
 	else
 	{

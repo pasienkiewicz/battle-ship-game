@@ -5,9 +5,14 @@ void IO::resetColor()
     setColor(IO::WHITE);
 }
 
-void IO::setRed()
+void IO::setGreen()
 {
-    setColor(IO::RED);
+    setColor(IO::GREEN);
+}
+
+void IO::setCyan()
+{
+    setColor(IO::CYAN);
 }
 
 void IO::setYellow()
@@ -15,9 +20,9 @@ void IO::setYellow()
     setColor(IO::YELLOW);
 }
 
-void IO::setGreen()
+void IO::setRed()
 {
-    setColor(IO::GREEN);
+    setColor(IO::RED);
 }
 
 void IO::clearScreen()
