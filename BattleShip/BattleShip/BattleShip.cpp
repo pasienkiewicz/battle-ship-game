@@ -7,6 +7,8 @@
 #include <chrono>
 #include <thread>
 
+using namespace std;
+
 string askForComputerName()
 {
 	string answer = IO::askForInput("Do you want to give a name to Computer? (y/n): ");
@@ -29,6 +31,37 @@ string askForPlayerName()
 	return IO::askForInput("Name: ");
 }
 
+bool askIfCompuerShipsNeedsToBePlayedInAdvancedWay()
+{
+	string answer = IO::askForInput("Do you want to Computer ships to be placed in advanced way with spaces? (y/n): ");
+
+	return answer == "y";
+}
+
+bool askIfComputerAttacksInAdvancedWay()
+{
+	string answer = IO::askForInput("Do you want the Computer to attack in advanced way? (y/n): ");
+
+	return answer == "y";
+}
+
+void spawnPlayerShips(Player &gamer)
+{
+	string answer = IO::askForInput("Do you want to put your ships yourself? (y/n): ");
+	if (answer == "y")
+	{
+		gamer.spawnShip();
+
+		return;
+	}
+
+	answer = IO::askForInput("Do you want to your ships to be placed in advanced way with spaces? (y/n): ");
+
+	gamer.advancedShipSpawn = answer == "y";
+
+	gamer.automaticShipSpawn();
+}
+
 int main()
 {
 	srand(time(NULL));
@@ -38,33 +71,12 @@ int main()
 
 	gamer.name = askForPlayerName();
 	ai.name = askForComputerName();
-
-	cout << "Do you want to Computer ships to be placed in advanced way with spaces? (y/n): ";
-	cin >> temp;
-	if (temp == "y")
-		ai.advancedShipSpawn = true;
-
-	cout << "Do you want to Computer to attack in advanced way? (y/n): ";
-	cin >> temp;
-	if (temp == "y")
-		ai.advancedAttack = true;
+	ai.advancedShipSpawn = askIfCompuerShipsNeedsToBePlayedInAdvancedWay();
+	ai.advancedAttack = askIfComputerAttacksInAdvancedWay();
 
 	ai.automaticShipSpawn();
 
-	cout << "Do you want to your to be placed randomly? (y/n): ";
-	cin >> temp;
-	if (temp == "y")
-	{
-		cout << "Do you want to your ship be placed in advanced way with spaces? (y/n): ";
-		cin >> temp;
-		if (temp == "y")
-		{
-			gamer.advancedShipSpawn = true;
-		}
-		gamer.automaticShipSpawn();
-	}
-	else
-		gamer.spawnShip();
+	spawnPlayerShips(gamer);
 
 	while (true)
 	{
