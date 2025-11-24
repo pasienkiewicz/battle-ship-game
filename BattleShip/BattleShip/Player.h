@@ -4,7 +4,7 @@
 class Player : public Ships
 {
 public:
-	Player(string name);
+	Player();
 	bool attack(Ships &oponentShip);
 	void spawnShip();
 

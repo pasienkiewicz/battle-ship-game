@@ -1,8 +1,8 @@
 #include "Player.h"
 
-Player::Player(string name)
+Player::Player()
 {
-    this->name = name;
+    this->name = "Player";
 
     shipsType[0] = "Carier (space 5): ";
     shipsType[1] = "Battleship (space 4): ";
@@ -80,14 +80,14 @@ bool Player::attack(Ships &ai)
                     shotgrid[y][x] = '$';
                     ai.setHitChar(y, x);
                     if (ai.checkIfSink())
-                        displayInfo("Player " + name + ": oponent ship sink");
+                        displayInfo(name + ": oponent ship sink");
                     else
-                        displayInfo("Player " + name + ": oponent ship hit");
+                        displayInfo(name + ": oponent ship hit");
                     return true;
                 }
                 else
                 {
-                    displayInfo("Player " + name + ": miss");
+                    displayInfo(name + ": miss");
                     shotgrid[y][x] = 'X';
                     return false;
                 }

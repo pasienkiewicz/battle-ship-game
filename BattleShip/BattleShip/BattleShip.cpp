@@ -9,17 +9,6 @@
 
 using namespace std;
 
-string askForPlayerName()
-{
-	string answer = IO::askForInput("Do you want to give a name to Player? (y/n): ");
-	if (answer != "y")
-	{
-		return "Player";
-	}
-
-	return IO::askForInput("Name: ");
-}
-
 bool askIfCompuerShipsNeedsToBePlayedInAdvancedWay()
 {
 	string answer = IO::askForInput("Do you want to Computer ships to be placed in advanced way with spaces? (y/n): ");
@@ -54,7 +43,7 @@ void spawnPlayerShips(Player &gamer)
 int main()
 {
 	srand(time(NULL));
-	Player gamer = Player(askForPlayerName());
+	Player gamer = Player();
 
 	Computer ai = Computer(askIfCompuerShipsNeedsToBePlayedInAdvancedWay(), askIfComputerAttacksInAdvancedWay());
 
@@ -66,7 +55,7 @@ int main()
 		{
 			if (ai.checkLost())
 			{
-				gamer.drawTwoBoards(ai, "Player " + gamer.name + "Have won");
+				gamer.drawTwoBoards(ai, gamer.name + "Have won");
 				return 0;
 			}
 		}
@@ -77,7 +66,7 @@ int main()
 
 			if (gamer.checkLost())
 			{
-				gamer.drawTwoBoards(ai, "Computer " + ai.name + ": Have won");
+				gamer.drawTwoBoards(ai, ai.name + ": Have won");
 				return 0;
 			}
 			gamer.drawTwoBoards(ai);
