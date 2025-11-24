@@ -1,18 +1,17 @@
 #pragma once
 #include "Ships.h"
 #include "Computer.h"
-class Player: public Ships
+class Player : public Ships
 {
 public:
-	//konstructor
 	Player();
-	//acess point
-	bool attack(Ships& oponentShip);
+	bool attack(Ships &oponentShip);
 	void spawnShip();
-public:		//options
+
+public: // options
 	string name = "X";
+
 private:
-	//methods whith diferent classes
 private:
 	void convertCoordinates(string a, string b);
 	void convertCoordinates(string a);
@@ -21,9 +20,8 @@ private:
 	bool checkSize(int i);
 	bool checkDirection();
 	int encript(char a);
+
 private:
-	//variables
 	int x, y, x2, y2;
 	string shipsType[5];
 };
-

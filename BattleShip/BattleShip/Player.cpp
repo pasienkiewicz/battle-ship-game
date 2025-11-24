@@ -10,26 +10,27 @@ Player::Player()
 }
 
 void Player::spawnShip()
-{		
+{
     string a, b;
     for (int i = 0; i < numberOfShips; i++)
     {
         while (true)
         {
             Board::drawSigleBoard();
-            cout << "Enter ship start and end koordinate. Ex. Submarine (size 3): 1A 1C " << endl << endl;
+            cout << "Enter ship start and end koordinate. Ex. Submarine (size 3): 1A 1C " << endl
+                 << endl;
             cout << shipsType[i];
             cin >> a >> b;
             cin.ignore();
             convertCoordinates(a, b);
             if (checkDoubleCoordinates())
             {
-                bool direction=checkDirection();
+                bool direction = checkDirection();
                 if (checkOverlap(y, x, direction, shipSize[i]))
                 {
                     if (checkSize(shipSize[i]))
                     {
-                        setShip(y, x, direction, shipSize[i]-1, shipType[i]);
+                        setShip(y, x, direction, shipSize[i] - 1, shipType[i]);
                         break;
                     }
                     else
@@ -54,10 +55,10 @@ void Player::spawnShip()
             }
         }
         Board::drawSigleBoard();
-    }        
+    }
 }
 
-bool Player::attack(Ships& ai)
+bool Player::attack(Ships &ai)
 {
     string a;
     drawTwoBoards(ai);
@@ -70,14 +71,14 @@ bool Player::attack(Ships& ai)
 
         if (checkCoordinates())
         {
-            if (checkShotGrid(y,x))
+            if (checkShotGrid(y, x))
             {
                 if (checkIfShip(y, x, ai))
                 {
                     shotgrid[y][x] = '$';
                     ai.setHitChar(y, x);
                     if (ai.checkIfSink())
-                        displayInfo("Player " + name +": oponent ship sink");
+                        displayInfo("Player " + name + ": oponent ship sink");
                     else
                         displayInfo("Player " + name + ": oponent ship hit");
                     return true;
@@ -130,7 +131,7 @@ bool Player::checkDoubleCoordinates()
 
 bool Player::checkCoordinates()
 {
-    if ( y == -1 || x == -1 )
+    if (y == -1 || x == -1)
     {
         return false;
     }
@@ -151,15 +152,15 @@ bool Player::checkDirection()
         return false;
     if (y == y2)
         return true;
-    
+
     throw invalid_argument("Invalid direction");
 }
 
 int Player::encript(char a)
 {
     if (isdigit(a))
-        return a-'0';
-    if (a == 'a' || a== 'A')
+        return a - '0';
+    if (a == 'a' || a == 'A')
         return 0;
     else if (a == 'b' || a == 'B')
         return 1;

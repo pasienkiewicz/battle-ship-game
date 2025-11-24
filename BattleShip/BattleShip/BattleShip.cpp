@@ -19,20 +19,24 @@ int main()
 
 	cout << "Do you want to Computer ships to be placed in advanced way with spaces? (y/n): ";
 	cin >> temp;
-	if (temp == "y") ai.advancedShipSpawn = true;
+	if (temp == "y")
+		ai.advancedShipSpawn = true;
 
 	cout << "Do you want to Computer to attack in advanced way? (y/n): ";
 	cin >> temp;
-	if (temp == "y") ai.advancedAttack = true;
+	if (temp == "y")
+		ai.advancedAttack = true;
 
 	ai.automaticShipSpawn();
 
 	cout << "Do you want to your to be placed randomly? (y/n): ";
 	cin >> temp;
-	if (temp == "y") {
+	if (temp == "y")
+	{
 		cout << "Do you want to your ship be placed in advanced way with spaces? (y/n): ";
 		cin >> temp;
-		if (temp == "y") {
+		if (temp == "y")
+		{
 			gamer.advancedShipSpawn = true;
 		}
 		gamer.automaticShipSpawn();

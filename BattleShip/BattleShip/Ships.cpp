@@ -47,10 +47,11 @@ bool Ships::checkIfSink()
 	{
 		numberOfShips = newset.size();
 		numberOfShipTypes.clear();
-		for (auto elem : newset) {
+		for (auto elem : newset)
+		{
 			numberOfShipTypes.push_back(elem);
 		}
-		return true;		
+		return true;
 	}
 	else
 		return false;
@@ -96,7 +97,6 @@ void Ships::automaticShipSpawn()
 	}
 }
 
-
 bool Ships::checkShotGrid(int y, int x)
 {
 	return !(shotgrid[y][x] == 'X') && !(shotgrid[y][x] == '$');
@@ -105,16 +105,17 @@ bool Ships::checkShotGrid(int y, int x)
 void Ships::setShip(int y, int x, bool direction, int shipSize, char shipType)
 {
 	int goesRight = 0, goesDown = 0;
-	if (direction == 1) 
+	if (direction == 1)
 		goesRight = shipSize;
-	else 
+	else
 		goesDown = shipSize;
 
 	for (int i = y; i <= y + goesDown; i++)
 	{
 		for (int j = x; j <= x + goesRight; j++)
 		{
-			if (advancedShipSpawn) {
+			if (advancedShipSpawn)
+			{
 				if (y - 1 != -1)
 					spawngrid[i - 1][j] = 'O';
 				if (x - 1 != -1)
@@ -131,7 +132,7 @@ void Ships::setShip(int y, int x, bool direction, int shipSize, char shipType)
 	}
 }
 
-bool Ships::checkIfShip(int y, int x, Ships& oponentShip)
+bool Ships::checkIfShip(int y, int x, Ships &oponentShip)
 {
 	if (oponentShip.getAttackedChar(y, x) == 'O')
 	{
@@ -155,14 +156,14 @@ bool Ships::checkOverlap(int y, int x, bool direction, int shipSize)
 	{
 		for (int j = x; j <= x + goesRight; j++)
 		{
-			if (advancedShipSpawn) {
-				if(spawngrid[i][j] == 'O')
+			if (advancedShipSpawn)
+			{
+				if (spawngrid[i][j] == 'O')
 					return 0;
-			} else if (shipgrid[0][i][j] == 'O')
+			}
+			else if (shipgrid[0][i][j] == 'O')
 				return 0;
 		}
 	}
 	return 1;
 }
-
-

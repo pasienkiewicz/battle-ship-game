@@ -1,8 +1,7 @@
 #include "Computer.h"
 
 Computer::Computer()
-	:
-	attackStage(0)
+	: attackStage(0)
 {
 	shipSize[0] = 5;
 	shipSize[1] = 4;
@@ -11,19 +10,21 @@ Computer::Computer()
 	shipSize[4] = 2;
 }
 
-bool Computer::attack(Ships& gamer)
+bool Computer::attack(Ships &gamer)
 {
 	if (attackStage == 0)
 	{
 		while (true)
 		{
-			if (advancedAttack) {
+			if (advancedAttack)
+			{
 				y = rand() % getcolumns();
 				x = rand() % getrows();
-				if ((y+x) % 2 != 0)
+				if ((y + x) % 2 != 0)
 					continue;
 			}
-			else {
+			else
+			{
 				y = rand() % getcolumns();
 				x = rand() % getrows();
 			}
@@ -34,7 +35,8 @@ bool Computer::attack(Ships& gamer)
 				{
 					shotgrid[y][x] = '$';
 					gamer.setHitChar(y, x);
-					if (gamer.checkIfSink()) {
+					if (gamer.checkIfSink())
+					{
 						gamer.displayInfo("Computer " + name + ": oponent ship sink");
 						attackStage = 0;
 						continueAttack = false;
@@ -58,7 +60,7 @@ bool Computer::attack(Ships& gamer)
 	}
 	else if (attackStage == 1)
 	{
-		if (x2 + 1 == getrows()&&!continueAttack)
+		if (x2 + 1 == getrows() && !continueAttack)
 		{
 			attackStage++;
 			x2 = x;
@@ -72,8 +74,10 @@ bool Computer::attack(Ships& gamer)
 		}
 		else
 		{
-			if (!checkShotGrid(y2, x2 + 1)) {
-				if (continueAttack) {
+			if (!checkShotGrid(y2, x2 + 1))
+			{
+				if (continueAttack)
+				{
 					attackStage += 2;
 				}
 				else
@@ -85,7 +89,8 @@ bool Computer::attack(Ships& gamer)
 			{
 				shotgrid[y2][x2 + 1] = '$';
 				gamer.setHitChar(y2, x2 + 1);
-				if (gamer.checkIfSink()) {
+				if (gamer.checkIfSink())
+				{
 					gamer.displayInfo("Computer " + name + ": oponent ship sink");
 					attackStage = 0;
 					continueAttack = false;
@@ -101,9 +106,11 @@ bool Computer::attack(Ships& gamer)
 				shotgrid[y2][x2 + 1] = 'X';
 				gamer.setMissChar(y2, x2 + 1);
 				gamer.displayInfo("Computer " + name + ": miss");
-				if (continueAttack) {
+				if (continueAttack)
+				{
 					attackStage += 2;
-				} else
+				}
+				else
 					attackStage++;
 				x2 = x;
 				return false;
@@ -112,7 +119,7 @@ bool Computer::attack(Ships& gamer)
 	}
 	else if (attackStage == 2)
 	{
-		if (y2 + 1 == getcolumns() &&!continueAttack)
+		if (y2 + 1 == getcolumns() && !continueAttack)
 		{
 			attackStage++;
 			y2 = y;
@@ -126,8 +133,10 @@ bool Computer::attack(Ships& gamer)
 		}
 		else
 		{
-			if (!checkShotGrid(y2 + 1, x2)) {
-				if (continueAttack) {
+			if (!checkShotGrid(y2 + 1, x2))
+			{
+				if (continueAttack)
+				{
 					attackStage += 2;
 				}
 				else
@@ -139,7 +148,8 @@ bool Computer::attack(Ships& gamer)
 			{
 				shotgrid[y2 + 1][x2] = '$';
 				gamer.setHitChar(y2 + 1, x2);
-				if (gamer.checkIfSink()) {
+				if (gamer.checkIfSink())
+				{
 					gamer.displayInfo("Computer " + name + ": oponent ship sink");
 					attackStage = 0;
 					continueAttack = false;
@@ -155,7 +165,8 @@ bool Computer::attack(Ships& gamer)
 				shotgrid[y2 + 1][x2] = 'X';
 				gamer.setMissChar(y2 + 1, x2);
 				gamer.displayInfo("Computer " + name + ": miss");
-				if (continueAttack) {
+				if (continueAttack)
+				{
 					attackStage += 2;
 				}
 				else
@@ -181,8 +192,10 @@ bool Computer::attack(Ships& gamer)
 		}
 		else
 		{
-			if (!checkShotGrid(y2, x2 - 1)) {
-				if (continueAttack) {
+			if (!checkShotGrid(y2, x2 - 1))
+			{
+				if (continueAttack)
+				{
 					attackStage = 0;
 				}
 				else
@@ -194,7 +207,8 @@ bool Computer::attack(Ships& gamer)
 			{
 				shotgrid[y2][x2 - 1] = '$';
 				gamer.setHitChar(y2, x2 - 1);
-				if (gamer.checkIfSink()) {
+				if (gamer.checkIfSink())
+				{
 					gamer.displayInfo("Computer " + name + ": oponent ship sink");
 					attackStage = 0;
 					continueAttack = false;
@@ -209,7 +223,8 @@ bool Computer::attack(Ships& gamer)
 				shotgrid[y2][x2 - 1] = 'X';
 				gamer.setMissChar(y2, x2 - 1);
 				gamer.displayInfo("Computer " + name + ": miss");
-				if (continueAttack) {
+				if (continueAttack)
+				{
 					attackStage = 0;
 					continueAttack = false;
 				}
@@ -230,7 +245,8 @@ bool Computer::attack(Ships& gamer)
 		}
 		else
 		{
-			if (!checkShotGrid(y2 - 1, x2)) {
+			if (!checkShotGrid(y2 - 1, x2))
+			{
 				attackStage = 0;
 				y2 = y;
 				return attack(gamer);
@@ -239,7 +255,8 @@ bool Computer::attack(Ships& gamer)
 			{
 				shotgrid[y2 - 1][x2] = '$';
 				gamer.setHitChar(y2 - 1, x2);
-				if (gamer.checkIfSink()) {
+				if (gamer.checkIfSink())
+				{
 					gamer.displayInfo("Computer " + name + ": oponent ship sink");
 					attackStage = 0;
 					continueAttack = false;
