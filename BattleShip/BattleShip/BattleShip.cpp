@@ -1,36 +1,22 @@
 #include <iostream>
 #include "Board.h"
+#include "IO.h"
 #include "Player.h"
 #include "Computer.h"
 #include <time.h>
 #include <chrono>
 #include <thread>
 
-
-int main() 
+int main()
 {
-	//SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 12);
 	srand(time(NULL));
 	Player gamer;
 	Computer ai;
 	string temp;
 
-	cout << "Do you want to give a name to Computer? (y/n): ";
-	cin >> temp;
-	if (temp == "y") {
-		cout << "Name: ";
-		cin >> temp;
-		ai.name = temp;
-	}
+	std::string computerName = askForPlayerName();
+	std::string gamerName = askForPlayerName();
 
-	cout << "Do you want to give a name to Player? (y/n): ";
-	cin >> temp;
-	if (temp == "y") {
-		cout << "Name: ";
-		cin >> temp;
-		gamer.name = temp;
-	}
-		
 	cout << "Do you want to Computer ships to be placed in advanced way with spaces? (y/n): ";
 	cin >> temp;
 	if (temp == "y") ai.advancedShipSpawn = true;
@@ -56,7 +42,7 @@ int main()
 
 	while (true)
 	{
-		while(gamer.attack(ai))
+		while (gamer.attack(ai))
 		{
 			if (ai.checkLost())
 			{
@@ -65,7 +51,7 @@ int main()
 			}
 		}
 		gamer.drawTwoBoards(ai);
-		while(ai.attack(gamer))
+		while (ai.attack(gamer))
 		{
 			this_thread::sleep_for(chrono::seconds(2));
 
@@ -75,11 +61,30 @@ int main()
 				return 0;
 			}
 			gamer.drawTwoBoards(ai);
-			
 		}
 		this_thread::sleep_for(chrono::seconds(2));
 		gamer.drawTwoBoards(ai);
-
 	}
-	
+}
+
+string askForComputerName()
+{
+	string answer = IO::askForInput("Do you want to give a name to Computer? (y/n): ");
+	if (answer != "y")
+	{
+		return "Computer";
+	}
+
+	return IO::askForInput("Name: ");
+}
+
+string askForPlayerName()
+{
+	string answer = IO::askForInput("Do you want to give a name to Player? (y/n): ");
+	if (answer != "y")
+	{
+		return "Player";
+	}
+
+	return IO::askForInput("Name: ");
 }
