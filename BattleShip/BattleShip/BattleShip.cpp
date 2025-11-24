@@ -7,6 +7,28 @@
 #include <chrono>
 #include <thread>
 
+string askForComputerName()
+{
+	string answer = IO::askForInput("Do you want to give a name to Computer? (y/n): ");
+	if (answer != "y")
+	{
+		return "Computer";
+	}
+
+	return IO::askForInput("Name: ");
+}
+
+string askForPlayerName()
+{
+	string answer = IO::askForInput("Do you want to give a name to Player? (y/n): ");
+	if (answer != "y")
+	{
+		return "Player";
+	}
+
+	return IO::askForInput("Name: ");
+}
+
 int main()
 {
 	srand(time(NULL));
@@ -69,26 +91,4 @@ int main()
 		this_thread::sleep_for(chrono::seconds(2));
 		gamer.drawTwoBoards(ai);
 	}
-}
-
-string askForComputerName()
-{
-	string answer = IO::askForInput("Do you want to give a name to Computer? (y/n): ");
-	if (answer != "y")
-	{
-		return "Computer";
-	}
-
-	return IO::askForInput("Name: ");
-}
-
-string askForPlayerName()
-{
-	string answer = IO::askForInput("Do you want to give a name to Player? (y/n): ");
-	if (answer != "y")
-	{
-		return "Player";
-	}
-
-	return IO::askForInput("Name: ");
 }
