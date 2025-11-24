@@ -7,6 +7,28 @@
 #include <chrono>
 #include <thread>
 
+string askForComputerName()
+{
+	string answer = IO::askForInput("Do you want to give a name to Computer? (y/n): ");
+	if (answer != "y")
+	{
+		return "Computer";
+	}
+
+	return IO::askForInput("Name: ");
+}
+
+string askForPlayerName()
+{
+	string answer = IO::askForInput("Do you want to give a name to Player? (y/n): ");
+	if (answer != "y")
+	{
+		return "Player";
+	}
+
+	return IO::askForInput("Name: ");
+}
+
 int main()
 {
 	srand(time(NULL));
@@ -14,8 +36,8 @@ int main()
 	Computer ai;
 	string temp;
 
-	std::string computerName = askForPlayerName();
-	std::string gamerName = askForPlayerName();
+	gamer.name = askForPlayerName();
+	ai.name = askForComputerName();
 
 	cout << "Do you want to Computer ships to be placed in advanced way with spaces? (y/n): ";
 	cin >> temp;
@@ -69,26 +91,4 @@ int main()
 		this_thread::sleep_for(chrono::seconds(2));
 		gamer.drawTwoBoards(ai);
 	}
-}
-
-string askForComputerName()
-{
-	string answer = IO::askForInput("Do you want to give a name to Computer? (y/n): ");
-	if (answer != "y")
-	{
-		return "Computer";
-	}
-
-	return IO::askForInput("Name: ");
-}
-
-string askForPlayerName()
-{
-	string answer = IO::askForInput("Do you want to give a name to Player? (y/n): ");
-	if (answer != "y")
-	{
-		return "Player";
-	}
-
-	return IO::askForInput("Name: ");
 }
