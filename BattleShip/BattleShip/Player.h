@@ -4,14 +4,10 @@
 class Player : public Ships
 {
 public:
-	Player();
+	Player(string name);
 	bool attack(Ships &oponentShip);
 	void spawnShip();
 
-public: // options
-	string name = "X";
-
-private:
 private:
 	void convertCoordinates(string a, string b);
 	void convertCoordinates(string a);

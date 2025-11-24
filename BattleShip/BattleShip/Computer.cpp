@@ -1,13 +1,18 @@
 #include "Computer.h"
 
-Computer::Computer()
-	: attackStage(0)
+Computer::Computer(bool advancedShipSpawn, bool advancedAttack)
 {
+	this->name = "Computer";
+	this->advancedShipSpawn = advancedShipSpawn;
+	this->advancedAttack = advancedAttack;
+
 	shipSize[0] = 5;
 	shipSize[1] = 4;
 	shipSize[2] = 3;
 	shipSize[3] = 3;
 	shipSize[4] = 2;
+
+	automaticShipSpawn();
 }
 
 bool Computer::attack(Ships &gamer)

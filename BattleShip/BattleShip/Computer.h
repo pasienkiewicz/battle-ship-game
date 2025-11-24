@@ -5,7 +5,7 @@
 class Computer : public Ships
 {
 public:
-	Computer();
+	Computer(bool advancedShipSpawn, bool advancedAttack);
 	bool attack(Ships &gamer);
 
 public:
@@ -13,7 +13,7 @@ public:
 
 private:
 	bool continueAttack;
-	int attackStage;
+	int attackStage = 0;
 
 	int x, y, x2, y2;
 	bool downright;

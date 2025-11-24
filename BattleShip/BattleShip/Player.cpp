@@ -1,7 +1,9 @@
 #include "Player.h"
 
-Player::Player()
+Player::Player(string name)
 {
+    this->name = name;
+
     shipsType[0] = "Carier (space 5): ";
     shipsType[1] = "Battleship (space 4): ";
     shipsType[2] = "Destroyer (space 3): ";
