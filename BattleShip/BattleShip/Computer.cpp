@@ -34,9 +34,9 @@ bool Computer::attack(Ships &player)
 				x = rand() % getrows();
 			}
 
-			if (checkShotGrid(y, x))
+			if (isHitAttemptValid(y, x))
 			{
-				if (checkIfShip(y, x, player))
+				if (didHitShip(y, x, player))
 				{
 					shotgrid[y][x] = '$';
 					player.setHitChar(y, x);
@@ -79,7 +79,7 @@ bool Computer::attack(Ships &player)
 		}
 		else
 		{
-			if (!checkShotGrid(y2, x2 + 1))
+			if (!isHitAttemptValid(y2, x2 + 1))
 			{
 				if (continueAttack)
 				{
@@ -90,7 +90,7 @@ bool Computer::attack(Ships &player)
 				x2 = x;
 				return attack(player);
 			}
-			else if (checkIfShip(y2, x2 + 1, player))
+			else if (didHitShip(y2, x2 + 1, player))
 			{
 				shotgrid[y2][x2 + 1] = '$';
 				player.setHitChar(y2, x2 + 1);
@@ -138,7 +138,7 @@ bool Computer::attack(Ships &player)
 		}
 		else
 		{
-			if (!checkShotGrid(y2 + 1, x2))
+			if (!isHitAttemptValid(y2 + 1, x2))
 			{
 				if (continueAttack)
 				{
@@ -149,7 +149,7 @@ bool Computer::attack(Ships &player)
 				y2 = y;
 				return attack(player);
 			}
-			else if (checkIfShip(y2 + 1, x2, player))
+			else if (didHitShip(y2 + 1, x2, player))
 			{
 				shotgrid[y2 + 1][x2] = '$';
 				player.setHitChar(y2 + 1, x2);
@@ -197,7 +197,7 @@ bool Computer::attack(Ships &player)
 		}
 		else
 		{
-			if (!checkShotGrid(y2, x2 - 1))
+			if (!isHitAttemptValid(y2, x2 - 1))
 			{
 				if (continueAttack)
 				{
@@ -208,7 +208,7 @@ bool Computer::attack(Ships &player)
 				x2 = x;
 				return attack(player);
 			}
-			else if (checkIfShip(y2, x2 - 1, player))
+			else if (didHitShip(y2, x2 - 1, player))
 			{
 				shotgrid[y2][x2 - 1] = '$';
 				player.setHitChar(y2, x2 - 1);
@@ -250,13 +250,13 @@ bool Computer::attack(Ships &player)
 		}
 		else
 		{
-			if (!checkShotGrid(y2 - 1, x2))
+			if (!isHitAttemptValid(y2 - 1, x2))
 			{
 				attackStage = 0;
 				y2 = y;
 				return attack(player);
 			}
-			else if (checkIfShip(y2 - 1, x2, player))
+			else if (didHitShip(y2 - 1, x2, player))
 			{
 				shotgrid[y2 - 1][x2] = '$';
 				player.setHitChar(y2 - 1, x2);

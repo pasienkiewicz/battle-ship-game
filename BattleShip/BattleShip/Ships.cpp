@@ -88,7 +88,7 @@ void Ships::automaticShipSpawn()
 				else
 					direction = rand() % 2;
 			}
-			if (checkOverlap(y, x, direction, shipSize[i] - 1))
+			if (isShipPlacedInCorrectPossition(y, x, direction, shipSize[i] - 1))
 			{
 				setShip(y, x, direction, shipSize[i] - 1, shipType[i]);
 				break;
@@ -97,7 +97,7 @@ void Ships::automaticShipSpawn()
 	}
 }
 
-bool Ships::checkShotGrid(int y, int x)
+bool Ships::isHitAttemptValid(int y, int x)
 {
 	return !(shotgrid[y][x] == 'X') && !(shotgrid[y][x] == '$');
 }
@@ -132,7 +132,7 @@ void Ships::setShip(int y, int x, bool direction, int shipSize, char shipType)
 	}
 }
 
-bool Ships::checkIfShip(int y, int x, Ships &oponentShip)
+bool Ships::didHitShip(int y, int x, Ships &oponentShip)
 {
 	if (oponentShip.getAttackedChar(y, x) == 'O')
 	{
@@ -144,7 +144,7 @@ bool Ships::checkIfShip(int y, int x, Ships &oponentShip)
 	}
 }
 
-bool Ships::checkOverlap(int y, int x, bool direction, int shipSize)
+bool Ships::isShipPlacedInCorrectPossition(int y, int x, bool direction, int shipSize)
 {
 	int goesRight = 0, goesDown = 0;
 	if (direction == 1)
@@ -159,11 +159,12 @@ bool Ships::checkOverlap(int y, int x, bool direction, int shipSize)
 			if (advancedShipSpawn)
 			{
 				if (spawngrid[i][j] == 'O')
-					return 0;
+					return false;
 			}
 			else if (shipgrid[0][i][j] == 'O')
-				return 0;
+				return false;
 		}
 	}
-	return 1;
+
+	return true;
 }

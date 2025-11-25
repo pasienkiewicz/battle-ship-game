@@ -11,11 +11,11 @@ public:
 private:
 	void convertCoordinates(string a, string b);
 	void convertCoordinates(string a);
-	bool checkDoubleCoordinates();
-	bool checkCoordinates();
-	bool checkSize(int i);
-	bool checkDirection();
-	int encript(char a);
+	bool areDoubleCoordinatesValid();
+	bool areCoordinatesValid();
+	bool isShipCorrectSize(int i);
+	bool getShipDirection();
+	int transformCharToInt(char a);
 
 private:
 	int x, y, x2, y2;

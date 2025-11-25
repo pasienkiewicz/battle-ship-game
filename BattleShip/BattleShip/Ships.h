@@ -19,10 +19,10 @@ public:
 	string name = "X";
 
 protected:
-	bool checkShotGrid(int y, int x);
+	bool isHitAttemptValid(int y, int x);
 	void setShip(int y, int x, bool direction, int shipSize, char shipType);
-	bool checkIfShip(int y, int x, Ships &oponentShip);
-	bool checkOverlap(int y, int x, bool direction, int shipSize);
+	bool didHitShip(int y, int x, Ships &oponentShip);
+	bool isShipPlacedInCorrectPossition(int y, int x, bool direction, int shipSize);
 
 protected:
 	int numberOfShips = 5;

@@ -25,38 +25,36 @@ void Player::spawnShip()
             cin >> a >> b;
             cin.ignore();
             convertCoordinates(a, b);
-            if (checkDoubleCoordinates())
-            {
-                bool direction = checkDirection();
-                if (checkOverlap(y, x, direction, shipSize[i]))
-                {
-                    if (checkSize(shipSize[i]))
-                    {
-                        setShip(y, x, direction, shipSize[i] - 1, shipType[i]);
-                        break;
-                    }
-                    else
-                    {
-                        cout << "Unappropriated ship size! Please enter other coordinates" << endl;
-                        cout << "Press \"enter\" key to input new koordinates...";
-                        cin.get();
-                    }
-                }
-                else
-                {
-                    cout << "There is already ship in those coordinates! Please enter other coordinates" << endl;
-                    cout << "Press \"enter\" key to input new koordinates...";
-                    cin.get();
-                }
-            }
-            else
+
+            if (!areDoubleCoordinatesValid())
             {
                 cout << "Wrong coordinates! Please enter other coordinates.";
                 cout << "Press \"enter\" key to input new koordinates...";
                 cin.get();
+
+                continue;
             }
+            bool shipDirection = getShipDirection();
+            if (!isShipPlacedInCorrectPossition(y, x, shipDirection, shipSize[i]))
+            {
+                cout << "There is already ship in those coordinates! Please enter other coordinates" << endl;
+                cout << "Press \"enter\" key to input new koordinates...";
+                cin.get();
+
+                continue;
+            }
+            if (!isShipCorrectSize(shipSize[i]))
+            {
+                cout << "Unappropriated ship size! Please enter other coordinates" << endl;
+                cout << "Press \"enter\" key to input new koordinates...";
+                cin.get();
+                continue;
+            }
+
+            setShip(y, x, shipDirection, shipSize[i] - 1, shipType[i]);
+
+            break;
         }
-        Board::drawSigleBoard();
     }
 }
 
@@ -71,58 +69,58 @@ bool Player::attack(Ships &computer)
         cin.ignore();
         convertCoordinates(a);
 
-        if (checkCoordinates())
-        {
-            if (checkShotGrid(y, x))
-            {
-                if (checkIfShip(y, x, computer))
-                {
-                    shotgrid[y][x] = '$';
-                    computer.setHitChar(y, x);
-                    if (computer.checkIfSink())
-                        displayInfo(name + ": oponent ship sink");
-                    else
-                        displayInfo(name + ": oponent ship hit");
-                    return true;
-                }
-                else
-                {
-                    displayInfo(name + ": miss");
-                    shotgrid[y][x] = 'X';
-                    return false;
-                }
-            }
-            else
-            {
-                cout << "U have laready shoot there! Please enter other coordinates.";
-                cout << "Press \"enter\" key to input new koordinates...";
-                cin.get();
-            }
-        }
-        else
+        if (!areCoordinatesValid())
         {
             cout << "Wrong coordinates! Please enter other coordinates.";
             cout << "Press \"enter\" key to input new koordinates...";
             cin.get();
+
+            continue;
         }
+
+        if (!isHitAttemptValid(y, x))
+        {
+            cout << "Wrong coordinates! Please enter other coordinates.";
+            cout << "Press \"enter\" key to input new koordinates...";
+            cin.get();
+
+            continue;
+        }
+
+        if (!didHitShip(y, x, computer))
+        {
+            displayInfo(name + ": miss");
+            shotgrid[y][x] = 'X';
+
+            return false;
+        }
+
+        shotgrid[y][x] = '$';
+        computer.setHitChar(y, x);
+        if (computer.checkIfSink())
+            displayInfo(name + ": oponent ship sink");
+        else
+            displayInfo(name + ": oponent ship hit");
+
+        return true;
     }
 }
 
 void Player::convertCoordinates(string a, string b)
 {
-    y = encript(a.at(0));
-    x = encript(a.at(1));
-    y2 = encript(b.at(0));
-    x2 = encript(b.at(1));
+    y = transformCharToInt(a.at(0));
+    x = transformCharToInt(a.at(1));
+    y2 = transformCharToInt(b.at(0));
+    x2 = transformCharToInt(b.at(1));
 }
 
 void Player::convertCoordinates(string a)
 {
-    y = encript(a.at(0));
-    x = encript(a.at(1));
+    y = transformCharToInt(a.at(0));
+    x = transformCharToInt(a.at(1));
 }
 
-bool Player::checkDoubleCoordinates()
+bool Player::areDoubleCoordinatesValid()
 {
     if ((y == -1 || x == -1 || y2 == -1 || x2 == -1) || (y + x >= y2 + x2))
     {
@@ -131,7 +129,7 @@ bool Player::checkDoubleCoordinates()
     return true;
 }
 
-bool Player::checkCoordinates()
+bool Player::areCoordinatesValid()
 {
     if (y == -1 || x == -1)
     {
@@ -140,7 +138,7 @@ bool Player::checkCoordinates()
     return true;
 }
 
-bool Player::checkSize(int shipSize)
+bool Player::isShipCorrectSize(int shipSize)
 {
     if ((x2 - x + y2 - y + 1) == shipSize)
         return true;
@@ -148,17 +146,17 @@ bool Player::checkSize(int shipSize)
         return false;
 }
 
-bool Player::checkDirection()
+bool Player::getShipDirection()
 {
     if (x == x2)
         return false;
     if (y == y2)
         return true;
 
-    throw invalid_argument("Invalid direction");
+    throw invalid_argument("Invalid shipDirection");
 }
 
-int Player::encript(char a)
+int Player::transformCharToInt(char a)
 {
     if (isdigit(a))
         return a - '0';
