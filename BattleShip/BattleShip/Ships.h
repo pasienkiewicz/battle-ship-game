@@ -1,11 +1,13 @@
 #pragma once
 #include <set>
 #include "Board.h"
+#include "Coordinates.h"
+
 class Ships : public Board
 {
 public:
 	Ships();
-	char getAttackedChar(int y, int x);
+	char getAttackedChar(Coordinates coordinates);
 	bool checkLost();
 	void setHitChar(int y, int x);
 	void setMissChar(int y, int x);
@@ -19,10 +21,10 @@ public:
 	string name = "X";
 
 protected:
-	bool isHitAttemptValid(int y, int x);
-	void setShip(int y, int x, bool direction, int shipSize, char shipType);
-	bool didHitShip(int y, int x, Ships &oponentShip);
-	bool isShipPlacedInCorrectPossition(int y, int x, bool direction, int shipSize);
+	bool isHitAttemptValid(Coordinates coordinates);
+	void setShip(Coordinates coordinates, bool direction, int shipSize, char shipType);
+	bool didHitShip(Coordinates coordinates, Ships &oponentShip);
+	bool isShipPlacedInCorrectPossition(Coordinates coordinates, bool direction, int shipSize);
 
 protected:
 	int numberOfShips = 5;

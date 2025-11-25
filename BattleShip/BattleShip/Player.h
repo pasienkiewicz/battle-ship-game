@@ -1,6 +1,10 @@
 #pragma once
+#include <utility>
+#include <optional>
 #include "Ships.h"
+#include "Coordinates.h"
 #include "Computer.h"
+
 class Player : public Ships
 {
 public:
@@ -9,15 +13,13 @@ public:
 	void spawnShip();
 
 private:
-	void convertCoordinates(string a, string b);
-	void convertCoordinates(string a);
+	Coordinates convertCoordinates(string a);
 	bool areDoubleCoordinatesValid();
 	bool areCoordinatesValid();
-	bool isShipCorrectSize(int i);
-	bool getShipDirection();
+	bool isShipCorrectSize(Coordinates firstCoordinates, Coordinates secondCoordinates, int i);
+	bool getShipDirection(Coordinates firstCoordinates, Coordinates secondCoordinates);
 	int transformCharToInt(char a);
 
 private:
-	int x, y, x2, y2;
 	string shipsType[5];
 };
