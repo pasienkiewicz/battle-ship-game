@@ -6,7 +6,7 @@ class Computer : public Ships
 {
 public:
 	Computer(bool advancedShipSpawn, bool advancedAttack);
-	bool attack(Ships &gamer);
+	bool attack(Ships &player);
 
 public:
 	bool advancedAttack = false;

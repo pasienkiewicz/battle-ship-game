@@ -13,7 +13,7 @@ void Board::displayInfo(string message)
 	infoCounter++;
 }
 
-void Board::drawTwoBoards(Board &ai, string message)
+void Board::drawTwoBoards(Board &computer, string message)
 {
 	IO::clearScreen();
 	cout << "	 Ship Grid			  Attack Grid		" << info[0] << endl;
@@ -47,14 +47,14 @@ void Board::drawTwoBoards(Board &ai, string message)
 			{
 				IO::resetColor();
 				cout << "|";
-				setShotGridColor(ai, i, j);
+				setShotGridColor(computer, i, j);
 				cout << shotgrid[i][j];
 			}
 			else
 			{
 				IO::resetColor();
 				cout << "|";
-				setShotGridColor(ai, i, j);
+				setShotGridColor(computer, i, j);
 				cout << shotgrid[i][j];
 				IO::resetColor();
 				cout << "|";
@@ -161,9 +161,9 @@ void Board::setShipGridColor(int i, int j)
 	}
 }
 
-void Board::setShotGridColor(Board &ai, int i, int j)
+void Board::setShotGridColor(Board &computer, int i, int j)
 {
-	if (shotgrid[i][j] == '$' && count(ai.numberOfShipTypes.begin(), ai.numberOfShipTypes.end(), ai.shipgrid[2][i][j]) == 0)
+	if (shotgrid[i][j] == '$' && count(computer.numberOfShipTypes.begin(), computer.numberOfShipTypes.end(), computer.shipgrid[2][i][j]) == 0)
 	{
 		IO::setRed();
 	}

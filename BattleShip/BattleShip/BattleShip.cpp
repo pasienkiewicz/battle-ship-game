@@ -23,55 +23,55 @@ bool askIfComputerAttacksInAdvancedWay()
 	return answer == "y";
 }
 
-void spawnPlayerShips(Player &gamer)
+void spawnPlayerShips(Player &player)
 {
 	string answer = IO::askForInput("Do you want to put your ships yourself? (y/n): ");
 	if (answer == "y")
 	{
-		gamer.spawnShip();
+		player.spawnShip();
 
 		return;
 	}
 
 	answer = IO::askForInput("Do you want to your ships to be placed in advanced way with spaces? (y/n): ");
 
-	gamer.advancedShipSpawn = answer == "y";
+	player.advancedShipSpawn = answer == "y";
 
-	gamer.automaticShipSpawn();
+	player.automaticShipSpawn();
 }
 
 int main()
 {
 	srand(time(NULL));
-	Player gamer = Player();
+	Player player = Player();
 
-	Computer ai = Computer(askIfCompuerShipsNeedsToBePlayedInAdvancedWay(), askIfComputerAttacksInAdvancedWay());
+	Computer computer = Computer(askIfCompuerShipsNeedsToBePlayedInAdvancedWay(), askIfComputerAttacksInAdvancedWay());
 
-	spawnPlayerShips(gamer);
+	spawnPlayerShips(player);
 
 	while (true)
 	{
-		while (gamer.attack(ai))
+		while (player.attack(computer))
 		{
-			if (ai.checkLost())
+			if (computer.checkLost())
 			{
-				gamer.drawTwoBoards(ai, gamer.name + "Have won");
+				player.drawTwoBoards(computer, player.name + "Have won");
 				return 0;
 			}
 		}
-		gamer.drawTwoBoards(ai);
-		while (ai.attack(gamer))
+		player.drawTwoBoards(computer);
+		while (computer.attack(player))
 		{
 			this_thread::sleep_for(chrono::seconds(2));
 
-			if (gamer.checkLost())
+			if (player.checkLost())
 			{
-				gamer.drawTwoBoards(ai, ai.name + ": Have won");
+				player.drawTwoBoards(computer, computer.name + ": Have won");
 				return 0;
 			}
-			gamer.drawTwoBoards(ai);
+			player.drawTwoBoards(computer);
 		}
 		this_thread::sleep_for(chrono::seconds(2));
-		gamer.drawTwoBoards(ai);
+		player.drawTwoBoards(computer);
 	}
 }

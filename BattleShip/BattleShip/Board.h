@@ -30,7 +30,7 @@ protected:
 private:
 	void legend();
 	void setShipGridColor(int i, int j);
-	void setShotGridColor(Board &ai, int i, int j);
+	void setShotGridColor(Board &computer, int i, int j);
 
 private:
 	const int rows = 10;

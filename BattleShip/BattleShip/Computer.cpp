@@ -15,7 +15,7 @@ Computer::Computer(bool advancedShipSpawn, bool advancedAttack)
 	automaticShipSpawn();
 }
 
-bool Computer::attack(Ships &gamer)
+bool Computer::attack(Ships &player)
 {
 	if (attackStage == 0)
 	{
@@ -36,18 +36,18 @@ bool Computer::attack(Ships &gamer)
 
 			if (checkShotGrid(y, x))
 			{
-				if (checkIfShip(y, x, gamer))
+				if (checkIfShip(y, x, player))
 				{
 					shotgrid[y][x] = '$';
-					gamer.setHitChar(y, x);
-					if (gamer.checkIfSink())
+					player.setHitChar(y, x);
+					if (player.checkIfSink())
 					{
-						gamer.displayInfo(name + ": oponent ship sink");
+						player.displayInfo(name + ": oponent ship sink");
 						attackStage = 0;
 						continueAttack = false;
 						return true;
 					}
-					gamer.displayInfo(name + ": oponent ship hit");
+					player.displayInfo(name + ": oponent ship hit");
 					attackStage++;
 					x2 = x;
 					y2 = y;
@@ -55,9 +55,9 @@ bool Computer::attack(Ships &gamer)
 				}
 				else
 				{
-					gamer.setMissChar(y, x);
+					player.setMissChar(y, x);
 					shotgrid[y][x] = 'X';
-					gamer.displayInfo(name + ": miss");
+					player.displayInfo(name + ": miss");
 					return false;
 				}
 			}
@@ -69,13 +69,13 @@ bool Computer::attack(Ships &gamer)
 		{
 			attackStage++;
 			x2 = x;
-			return attack(gamer);
+			return attack(player);
 		}
 		else if (x2 + 1 == getrows() && continueAttack)
 		{
 			attackStage += 2;
 			x2 = x;
-			return attack(gamer);
+			return attack(player);
 		}
 		else
 		{
@@ -88,20 +88,20 @@ bool Computer::attack(Ships &gamer)
 				else
 					attackStage++;
 				x2 = x;
-				return attack(gamer);
+				return attack(player);
 			}
-			else if (checkIfShip(y2, x2 + 1, gamer))
+			else if (checkIfShip(y2, x2 + 1, player))
 			{
 				shotgrid[y2][x2 + 1] = '$';
-				gamer.setHitChar(y2, x2 + 1);
-				if (gamer.checkIfSink())
+				player.setHitChar(y2, x2 + 1);
+				if (player.checkIfSink())
 				{
-					gamer.displayInfo(name + ": oponent ship sink");
+					player.displayInfo(name + ": oponent ship sink");
 					attackStage = 0;
 					continueAttack = false;
 					return true;
 				}
-				gamer.displayInfo(name + ": oponent ship hit");
+				player.displayInfo(name + ": oponent ship hit");
 				x2 += 1;
 				continueAttack = true;
 				return true;
@@ -109,8 +109,8 @@ bool Computer::attack(Ships &gamer)
 			else
 			{
 				shotgrid[y2][x2 + 1] = 'X';
-				gamer.setMissChar(y2, x2 + 1);
-				gamer.displayInfo(name + ": miss");
+				player.setMissChar(y2, x2 + 1);
+				player.displayInfo(name + ": miss");
 				if (continueAttack)
 				{
 					attackStage += 2;
@@ -128,13 +128,13 @@ bool Computer::attack(Ships &gamer)
 		{
 			attackStage++;
 			y2 = y;
-			return attack(gamer);
+			return attack(player);
 		}
 		else if (y2 + 1 == getcolumns() && continueAttack)
 		{
 			attackStage += 2;
 			y2 = y;
-			return attack(gamer);
+			return attack(player);
 		}
 		else
 		{
@@ -147,20 +147,20 @@ bool Computer::attack(Ships &gamer)
 				else
 					attackStage++;
 				y2 = y;
-				return attack(gamer);
+				return attack(player);
 			}
-			else if (checkIfShip(y2 + 1, x2, gamer))
+			else if (checkIfShip(y2 + 1, x2, player))
 			{
 				shotgrid[y2 + 1][x2] = '$';
-				gamer.setHitChar(y2 + 1, x2);
-				if (gamer.checkIfSink())
+				player.setHitChar(y2 + 1, x2);
+				if (player.checkIfSink())
 				{
-					gamer.displayInfo(name + ": oponent ship sink");
+					player.displayInfo(name + ": oponent ship sink");
 					attackStage = 0;
 					continueAttack = false;
 					return true;
 				}
-				gamer.displayInfo(name + ": oponent ship hit");
+				player.displayInfo(name + ": oponent ship hit");
 				y2 += 1;
 				continueAttack = true;
 				return true;
@@ -168,8 +168,8 @@ bool Computer::attack(Ships &gamer)
 			else
 			{
 				shotgrid[y2 + 1][x2] = 'X';
-				gamer.setMissChar(y2 + 1, x2);
-				gamer.displayInfo(name + ": miss");
+				player.setMissChar(y2 + 1, x2);
+				player.displayInfo(name + ": miss");
 				if (continueAttack)
 				{
 					attackStage += 2;
@@ -187,13 +187,13 @@ bool Computer::attack(Ships &gamer)
 		{
 			attackStage++;
 			x2 = x;
-			return attack(gamer);
+			return attack(player);
 		}
 		else if (x2 - 1 == -1 && continueAttack)
 		{
 			attackStage = 0;
 			x2 = x;
-			return attack(gamer);
+			return attack(player);
 		}
 		else
 		{
@@ -206,28 +206,28 @@ bool Computer::attack(Ships &gamer)
 				else
 					attackStage++;
 				x2 = x;
-				return attack(gamer);
+				return attack(player);
 			}
-			else if (checkIfShip(y2, x2 - 1, gamer))
+			else if (checkIfShip(y2, x2 - 1, player))
 			{
 				shotgrid[y2][x2 - 1] = '$';
-				gamer.setHitChar(y2, x2 - 1);
-				if (gamer.checkIfSink())
+				player.setHitChar(y2, x2 - 1);
+				if (player.checkIfSink())
 				{
-					gamer.displayInfo(name + ": oponent ship sink");
+					player.displayInfo(name + ": oponent ship sink");
 					attackStage = 0;
 					continueAttack = false;
 					return true;
 				}
-				gamer.displayInfo(name + ": oponent ship hit");
+				player.displayInfo(name + ": oponent ship hit");
 				x2 -= 1;
 				return true;
 			}
 			else
 			{
 				shotgrid[y2][x2 - 1] = 'X';
-				gamer.setMissChar(y2, x2 - 1);
-				gamer.displayInfo(name + ": miss");
+				player.setMissChar(y2, x2 - 1);
+				player.displayInfo(name + ": miss");
 				if (continueAttack)
 				{
 					attackStage = 0;
@@ -246,7 +246,7 @@ bool Computer::attack(Ships &gamer)
 		if (y2 - 1 == -1)
 		{
 			attackStage = 0;
-			return attack(gamer);
+			return attack(player);
 		}
 		else
 		{
@@ -254,28 +254,28 @@ bool Computer::attack(Ships &gamer)
 			{
 				attackStage = 0;
 				y2 = y;
-				return attack(gamer);
+				return attack(player);
 			}
-			else if (checkIfShip(y2 - 1, x2, gamer))
+			else if (checkIfShip(y2 - 1, x2, player))
 			{
 				shotgrid[y2 - 1][x2] = '$';
-				gamer.setHitChar(y2 - 1, x2);
-				if (gamer.checkIfSink())
+				player.setHitChar(y2 - 1, x2);
+				if (player.checkIfSink())
 				{
-					gamer.displayInfo(name + ": oponent ship sink");
+					player.displayInfo(name + ": oponent ship sink");
 					attackStage = 0;
 					continueAttack = false;
 					return true;
 				}
-				gamer.displayInfo(name + ": oponent ship hit");
+				player.displayInfo(name + ": oponent ship hit");
 				y2 -= 1;
 				return true;
 			}
 			else
 			{
 				shotgrid[y2 - 1][x2] = 'X';
-				gamer.setMissChar(y2 - 1, x2);
-				gamer.displayInfo(name + ": miss");
+				player.setMissChar(y2 - 1, x2);
+				player.displayInfo(name + ": miss");
 				attackStage = 0;
 				y2 = y;
 				return false;

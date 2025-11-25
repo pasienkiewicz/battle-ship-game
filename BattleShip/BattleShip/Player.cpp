@@ -60,10 +60,10 @@ void Player::spawnShip()
     }
 }
 
-bool Player::attack(Ships &ai)
+bool Player::attack(Ships &computer)
 {
     string a;
-    drawTwoBoards(ai);
+    drawTwoBoards(computer);
     while (true)
     {
         cout << "Shot koordinate. Ex. 1A: ";
@@ -75,11 +75,11 @@ bool Player::attack(Ships &ai)
         {
             if (checkShotGrid(y, x))
             {
-                if (checkIfShip(y, x, ai))
+                if (checkIfShip(y, x, computer))
                 {
                     shotgrid[y][x] = '$';
-                    ai.setHitChar(y, x);
-                    if (ai.checkIfSink())
+                    computer.setHitChar(y, x);
+                    if (computer.checkIfSink())
                         displayInfo(name + ": oponent ship sink");
                     else
                         displayInfo(name + ": oponent ship hit");
