@@ -88,11 +88,19 @@ void Board::drawSigleBoard()
 		{
 			if (j + 1 != rows)
 			{
-				cout << "|" << shipgrid[0][i][j];
+				IO::resetColor();
+				cout << "|";
+				setShipGridColor(i, j);
+				cout << shipgrid[0][i][j];
 			}
 			else
 			{
-				cout << "|" << shipgrid[0][i][j] << "|";
+				IO::resetColor();
+				cout << "|";
+				setShipGridColor(i, j);
+				cout << shipgrid[0][i][j];
+				IO::resetColor();
+				cout << "|";
 			}
 		}
 		cout << endl;
