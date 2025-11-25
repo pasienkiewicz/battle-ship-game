@@ -62,7 +62,7 @@ int main()
 		player.drawTwoBoards(computer);
 		while (computer.attack(player))
 		{
-			this_thread::sleep_for(chrono::seconds(2));
+			this_thread::sleep_for(chrono::seconds(1));
 
 			if (player.checkLost())
 			{
@@ -71,7 +71,7 @@ int main()
 			}
 			player.drawTwoBoards(computer);
 		}
-		this_thread::sleep_for(chrono::seconds(2));
+		this_thread::sleep_for(chrono::seconds(1));
 		player.drawTwoBoards(computer);
 	}
 }
