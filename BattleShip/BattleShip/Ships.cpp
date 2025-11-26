@@ -20,15 +20,15 @@ char Ships::getAttackedChar(Coordinates coordinates)
 	return shipgrid[0][coordinates.y][coordinates.x];
 }
 
-void Ships::setHitChar(int y, int x)
+void Ships::setHitChar(Coordinates coordinates)
 {
-	shipgrid[0][y][x] = '$';
-	shipgrid[1][y][x] = ' ';
+	shipgrid[0][coordinates.y][coordinates.x] = '$';
+	shipgrid[1][coordinates.y][coordinates.x] = ' ';
 }
 
-void Ships::setMissChar(int y, int x)
+void Ships::setMissChar(Coordinates coordinates)
 {
-	shipgrid[0][y][x] = 'X';
+	shipgrid[0][coordinates.y][coordinates.x] = 'X';
 }
 
 bool Ships::checkIfSink()
@@ -88,18 +88,21 @@ void Ships::automaticShipSpawn()
 				else
 					direction = rand() % 2;
 			}
-			if (isShipPlacedInCorrectPossition(y, x, direction, shipSize[i] - 1))
+			if (isShipPlacedInCorrectPossition(Coordinates(x, y), direction, shipSize[i] - 1))
 			{
-				setShip(y, x, direction, shipSize[i] - 1, shipType[i]);
+				setShip(Coordinates(x, y), direction, shipSize[i] - 1, shipType[i]);
 				break;
 			}
 		}
 	}
 }
 
-bool Ships::isHitAttemptValid(Coordinates coordinates)
+bool Ships::isShotAttemptValid(Coordinates coordinates)
 {
-	return !(shotgrid[coordinates.y][coordinates.x] == 'X') && !(shotgrid[coordinates.y][coordinates.x] == '$');
+	return coordinates.x < getrows() &&
+		   coordinates.y < getcolumns() &&
+		   !(shotgrid[coordinates.y][coordinates.x] == 'X') &&
+		   !(shotgrid[coordinates.y][coordinates.x] == '$');
 }
 
 void Ships::setShip(Coordinates coordinates, bool direction, int shipSize, char shipType)

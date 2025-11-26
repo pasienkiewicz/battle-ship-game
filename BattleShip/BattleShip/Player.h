@@ -13,12 +13,8 @@ public:
 	void spawnShip();
 
 private:
-	Coordinates convertCoordinates(string a);
-	bool areDoubleCoordinatesValid();
-	bool areCoordinatesValid();
 	bool isShipCorrectSize(Coordinates firstCoordinates, Coordinates secondCoordinates, int i);
 	bool getShipDirection(Coordinates firstCoordinates, Coordinates secondCoordinates);
-	int transformCharToInt(char a);
 
 private:
 	string shipsType[5];

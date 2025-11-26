@@ -9,8 +9,8 @@ public:
 	Ships();
 	char getAttackedChar(Coordinates coordinates);
 	bool checkLost();
-	void setHitChar(int y, int x);
-	void setMissChar(int y, int x);
+	void setHitChar(Coordinates coordinates);
+	void setMissChar(Coordinates coordinates);
 	bool checkIfSink();
 
 public:
@@ -21,7 +21,7 @@ public:
 	string name = "X";
 
 protected:
-	bool isHitAttemptValid(Coordinates coordinates);
+	bool isShotAttemptValid(Coordinates coordinates);
 	void setShip(Coordinates coordinates, bool direction, int shipSize, char shipType);
 	bool didHitShip(Coordinates coordinates, Ships &oponentShip);
 	bool isShipPlacedInCorrectPossition(Coordinates coordinates, bool direction, int shipSize);

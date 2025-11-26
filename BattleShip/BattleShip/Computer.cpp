@@ -17,271 +17,132 @@ Computer::Computer(bool advancedShipSpawn, bool advancedAttack)
 
 bool Computer::attack(Ships &player)
 {
-	if (attackStage == 0)
+	if (nextAttackContext.has_value())
 	{
-		while (true)
-		{
-			if (advancedAttack)
-			{
-				y = rand() % getcolumns();
-				x = rand() % getrows();
-				if ((y + x) % 2 != 0)
-					continue;
-			}
-			else
-			{
-				y = rand() % getcolumns();
-				x = rand() % getrows();
-			}
+		AttackContext ctx = *nextAttackContext;
+		nextAttackContext = std::nullopt;
 
-			if (isHitAttemptValid(y, x))
-			{
-				if (didHitShip(y, x, player))
-				{
-					shotgrid[y][x] = '$';
-					player.setHitChar(y, x);
-					if (player.checkIfSink())
-					{
-						player.displayInfo(name + ": oponent ship sink");
-						attackStage = 0;
-						continueAttack = false;
-						return true;
-					}
-					player.displayInfo(name + ": oponent ship hit");
-					attackStage++;
-					x2 = x;
-					y2 = y;
-					return true;
-				}
-				else
-				{
-					player.setMissChar(y, x);
-					shotgrid[y][x] = 'X';
-					player.displayInfo(name + ": miss");
-					return false;
-				}
-			}
-		}
+		return attack(player, ctx);
 	}
-	else if (attackStage == 1)
+
+	return attack(player, getDefaultAttackContext());
+}
+
+bool Computer::attack(Ships &player, AttackContext attackContext)
+{
+	Coordinates attactCoordinates = attackContext.shotCoordinates;
+	AttackDirection attackDirection = attackContext.attackDirection;
+
+	if (!isShotAttemptValid(attactCoordinates))
 	{
-		if (x2 + 1 == getrows() && !continueAttack)
-		{
-			attackStage++;
-			x2 = x;
-			return attack(player);
-		}
-		else if (x2 + 1 == getrows() && continueAttack)
-		{
-			attackStage += 2;
-			x2 = x;
-			return attack(player);
-		}
-		else
-		{
-			if (!isHitAttemptValid(y2, x2 + 1))
-			{
-				if (continueAttack)
-				{
-					attackStage += 2;
-				}
-				else
-					attackStage++;
-				x2 = x;
-				return attack(player);
-			}
-			else if (didHitShip(y2, x2 + 1, player))
-			{
-				shotgrid[y2][x2 + 1] = '$';
-				player.setHitChar(y2, x2 + 1);
-				if (player.checkIfSink())
-				{
-					player.displayInfo(name + ": oponent ship sink");
-					attackStage = 0;
-					continueAttack = false;
-					return true;
-				}
-				player.displayInfo(name + ": oponent ship hit");
-				x2 += 1;
-				continueAttack = true;
-				return true;
-			}
-			else
-			{
-				shotgrid[y2][x2 + 1] = 'X';
-				player.setMissChar(y2, x2 + 1);
-				player.displayInfo(name + ": miss");
-				if (continueAttack)
-				{
-					attackStage += 2;
-				}
-				else
-					attackStage++;
-				x2 = x;
-				return false;
-			}
-		}
+		return attack(player, getNextAttactContextOnFailedAttempt(attackContext));
 	}
-	else if (attackStage == 2)
+
+	if (!didHitShip(attactCoordinates, player))
 	{
-		if (y2 + 1 == getcolumns() && !continueAttack)
-		{
-			attackStage++;
-			y2 = y;
-			return attack(player);
-		}
-		else if (y2 + 1 == getcolumns() && continueAttack)
-		{
-			attackStage += 2;
-			y2 = y;
-			return attack(player);
-		}
-		else
-		{
-			if (!isHitAttemptValid(y2 + 1, x2))
-			{
-				if (continueAttack)
-				{
-					attackStage += 2;
-				}
-				else
-					attackStage++;
-				y2 = y;
-				return attack(player);
-			}
-			else if (didHitShip(y2 + 1, x2, player))
-			{
-				shotgrid[y2 + 1][x2] = '$';
-				player.setHitChar(y2 + 1, x2);
-				if (player.checkIfSink())
-				{
-					player.displayInfo(name + ": oponent ship sink");
-					attackStage = 0;
-					continueAttack = false;
-					return true;
-				}
-				player.displayInfo(name + ": oponent ship hit");
-				y2 += 1;
-				continueAttack = true;
-				return true;
-			}
-			else
-			{
-				shotgrid[y2 + 1][x2] = 'X';
-				player.setMissChar(y2 + 1, x2);
-				player.displayInfo(name + ": miss");
-				if (continueAttack)
-				{
-					attackStage += 2;
-				}
-				else
-					attackStage++;
-				y2 = y;
-				return false;
-			}
-		}
+		player.setMissChar(attactCoordinates);
+		shotgrid[attactCoordinates.y][attactCoordinates.x] = 'X';
+		player.displayInfo(name + ": miss");
+
+		nextAttackContext.emplace(getNextAttactContextOnFailedAttempt(attackContext));
+
+		return false;
 	}
-	else if (attackStage == 3)
+
+	shotgrid[attactCoordinates.y][attactCoordinates.x] = '$';
+	player.setHitChar(attactCoordinates);
+	if (player.checkIfSink())
 	{
-		if (x2 - 1 == -1 && !continueAttack)
-		{
-			attackStage++;
-			x2 = x;
-			return attack(player);
-		}
-		else if (x2 - 1 == -1 && continueAttack)
-		{
-			attackStage = 0;
-			x2 = x;
-			return attack(player);
-		}
-		else
-		{
-			if (!isHitAttemptValid(y2, x2 - 1))
-			{
-				if (continueAttack)
-				{
-					attackStage = 0;
-				}
-				else
-					attackStage++;
-				x2 = x;
-				return attack(player);
-			}
-			else if (didHitShip(y2, x2 - 1, player))
-			{
-				shotgrid[y2][x2 - 1] = '$';
-				player.setHitChar(y2, x2 - 1);
-				if (player.checkIfSink())
-				{
-					player.displayInfo(name + ": oponent ship sink");
-					attackStage = 0;
-					continueAttack = false;
-					return true;
-				}
-				player.displayInfo(name + ": oponent ship hit");
-				x2 -= 1;
-				return true;
-			}
-			else
-			{
-				shotgrid[y2][x2 - 1] = 'X';
-				player.setMissChar(y2, x2 - 1);
-				player.displayInfo(name + ": miss");
-				if (continueAttack)
-				{
-					attackStage = 0;
-					continueAttack = false;
-				}
-				else
-					attackStage++;
-				x2 = x;
-				return false;
-			}
-		}
+		player.displayInfo(name + ": oponent ship sink");
+
+		nextAttackContext.emplace(getDefaultAttackContext());
+
+		return true;
 	}
-	else if (attackStage == 4)
+	player.displayInfo(name + ": oponent ship hit");
+
+	if (AttackDirection::NONE == attackDirection)
 	{
-		continueAttack = false;
-		if (y2 - 1 == -1)
+		return attack(player, AttackContext(AttackDirection::RIGHT, Coordinates(attactCoordinates.x + 1, attactCoordinates.y), true));
+	}
+
+	if (AttackDirection::RIGHT == attackDirection)
+	{
+		return attack(player, AttackContext(AttackDirection::RIGHT, Coordinates(attactCoordinates.x + 1, attactCoordinates.y), true));
+	}
+
+	if (AttackDirection::DOWN == attackDirection)
+	{
+		return attack(player, AttackContext(AttackDirection::DOWN, Coordinates(attactCoordinates.x, attactCoordinates.y + 1), true));
+	}
+
+	if (AttackDirection::LEFT == attackDirection)
+	{
+		return attack(player, AttackContext(AttackDirection::LEFT, Coordinates(attactCoordinates.x - 1, attactCoordinates.y), true));
+	}
+
+	if (AttackDirection::LEFT == attackDirection)
+	{
+		return attack(player, AttackContext(AttackDirection::LEFT, Coordinates(attactCoordinates.x, attactCoordinates.y - 1), true));
+	}
+
+	return attack(player, getDefaultAttackContext());
+}
+
+Coordinates Computer::getValidAttackCoordinates()
+{
+	Coordinates coordinates = getAttackCoordinates();
+	if (isShotAttemptValid(coordinates))
+	{
+		return coordinates;
+	}
+
+	return getValidAttackCoordinates();
+}
+
+Coordinates Computer::getAttackCoordinates()
+{
+	if (advancedAttack)
+	{
+		Coordinates coordinates = Coordinates(rand() % getcolumns(), rand() % getrows());
+		if ((coordinates.y + coordinates.x) % 2 != 0)
 		{
-			attackStage = 0;
-			return attack(player);
-		}
-		else
-		{
-			if (!isHitAttemptValid(y2 - 1, x2))
-			{
-				attackStage = 0;
-				y2 = y;
-				return attack(player);
-			}
-			else if (didHitShip(y2 - 1, x2, player))
-			{
-				shotgrid[y2 - 1][x2] = '$';
-				player.setHitChar(y2 - 1, x2);
-				if (player.checkIfSink())
-				{
-					player.displayInfo(name + ": oponent ship sink");
-					attackStage = 0;
-					continueAttack = false;
-					return true;
-				}
-				player.displayInfo(name + ": oponent ship hit");
-				y2 -= 1;
-				return true;
-			}
-			else
-			{
-				shotgrid[y2 - 1][x2] = 'X';
-				player.setMissChar(y2 - 1, x2);
-				player.displayInfo(name + ": miss");
-				attackStage = 0;
-				y2 = y;
-				return false;
-			}
+			return getAttackCoordinates();
 		}
 	}
 
-	throw invalid_argument("Invalid attack stage");
+	return Coordinates(rand() % getcolumns(), rand() % getrows());
+}
+
+AttackContext Computer::getNextAttactContextOnFailedAttempt(AttackContext currentAttackContext)
+{
+	Coordinates attactCoordinates = currentAttackContext.shotCoordinates;
+	AttackDirection attackDirection = currentAttackContext.attackDirection;
+	bool continueAttackInSameDirection = currentAttackContext.continueAttackInSameDirection;
+
+	if (AttackDirection::RIGHT == attackDirection)
+	{
+		return continueAttackInSameDirection
+				   ? AttackContext(AttackDirection::LEFT, Coordinates(attactCoordinates.x - 2, attactCoordinates.y), true)
+				   : AttackContext(AttackDirection::DOWN, Coordinates(attactCoordinates.x - 1, attactCoordinates.y + 1), false);
+	}
+
+	if (AttackDirection::DOWN == attackDirection)
+	{
+		return continueAttackInSameDirection
+				   ? AttackContext(AttackDirection::UP, Coordinates(attactCoordinates.x, attactCoordinates.y - 2), true)
+				   : AttackContext(AttackDirection::DOWN, Coordinates(attactCoordinates.x - 1, attactCoordinates.y + 1), false);
+	}
+
+	if (AttackDirection::LEFT == attackDirection)
+	{
+		return AttackContext(AttackDirection::UP, Coordinates(attactCoordinates.x + 1, attactCoordinates.y - 1), true);
+	}
+
+	return getDefaultAttackContext();
+}
+
+AttackContext Computer::getDefaultAttackContext()
+{
+	return AttackContext(AttackDirection::NONE, getValidAttackCoordinates(), false);
 }

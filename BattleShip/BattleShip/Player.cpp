@@ -18,7 +18,7 @@ void Player::spawnShip()
         while (true)
         {
             Board::drawSigleBoard();
-            cout << "Enter ship start and end koordinate. Ex. Submarine (size 3): 1A 1C " << endl
+            cout << "Enter ship start and end koordinate. Ex. Submarine (size 3): A1 C1 " << endl
                  << endl;
             cout << shipsType[i];
             cin >> firstCoordinateInput >> secondCoordinateInput;
@@ -27,8 +27,8 @@ void Player::spawnShip()
             std::optional<Coordinates> secondCoordinates;
             try
             {
-                Coordinates firstCoordinates = convertCoordinates(firstCoordinateInput);
-                Coordinates secondCoordinates = convertCoordinates(secondCoordinateInput);
+                firstCoordinates.emplace(Coordinates(firstCoordinateInput));
+                secondCoordinates.emplace(Coordinates(secondCoordinateInput));
             }
             catch (const std::invalid_argument &e)
             {
@@ -69,14 +69,14 @@ bool Player::attack(Ships &computer)
     drawTwoBoards(computer);
     while (true)
     {
-        cout << "Shot koordinate. Ex. 1A: ";
+        cout << "Shot koordinate. Ex. A1: ";
         cin >> coordinatesInput;
         cin.ignore();
         std::optional<Coordinates> coordinates;
 
         try
         {
-            Coordinates coordinates = convertCoordinates(coordinatesInput);
+            coordinates.emplace(Coordinates(coordinatesInput));
         }
         catch (const std::invalid_argument &e)
         {
@@ -87,7 +87,7 @@ bool Player::attack(Ships &computer)
             continue;
         }
 
-        if (!isHitAttemptValid(*coordinates))
+        if (!isShotAttemptValid(*coordinates))
         {
             cout << "Wrong coordinates! Please enter other coordinates.";
             cout << "Press \"enter\" key to input new koordinates...";
@@ -107,7 +107,7 @@ bool Player::attack(Ships &computer)
         }
 
         shotgrid[coord.y][coord.x] = '$';
-        computer.setHitChar(coord.y, coord.x);
+        computer.setHitChar(coord);
         if (computer.checkIfSink())
             displayInfo(name + ": oponent ship sink");
         else
@@ -126,7 +126,7 @@ bool Player::getShipDirection(Coordinates firstCoordinates, Coordinates secondCo
 {
     if (firstCoordinates.x == secondCoordinates.x)
         return false;
-    if (firstCoordinates.y == firstCoordinates.y)
+    if (firstCoordinates.y == secondCoordinates.y)
         return true;
 
     throw invalid_argument("Invalid shipDirection");

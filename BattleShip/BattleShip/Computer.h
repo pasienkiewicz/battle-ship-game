@@ -1,20 +1,22 @@
 #pragma once
+#include "AttackDirection.h"
 #include "Ships.h"
 #include "Player.h"
+#include "AttackContext.h"
 
 class Computer : public Ships
 {
 public:
 	Computer(bool advancedShipSpawn, bool advancedAttack);
+	Coordinates getValidAttackCoordinates();
 	bool attack(Ships &player);
 
-public:
-	bool advancedAttack = false;
-
 private:
-	bool continueAttack;
-	int attackStage = 0;
+	bool advancedAttack = false;
+	optional<AttackContext> nextAttackContext = nullopt;
 
-	int x, y, x2, y2;
-	bool downright;
+	bool attack(Ships &player, AttackContext nextAttackContext);
+	Coordinates getAttackCoordinates();
+	AttackContext getDefaultAttackContext();
+	AttackContext getNextAttactContextOnFailedAttempt(AttackContext currentAttackContext);
 };
