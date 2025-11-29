@@ -14,9 +14,11 @@ public:
 private:
 	bool advancedAttack = false;
 	optional<AttackContext> nextAttackContext = nullopt;
+	AttackDirection previousAttackDirection = AttackDirection::NONE;
 
 	bool attack(Ships &player, AttackContext nextAttackContext);
 	Coordinates getAttackCoordinates();
+	optional<Coordinates> getNearestValidCoordinates(Coordinates attackCoordinates, AttackDirection attackDirection);
 	AttackContext getDefaultAttackContext();
 	AttackContext getNextAttactContextOnFailedAttempt(AttackContext currentAttackContext);
 };

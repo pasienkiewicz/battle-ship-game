@@ -35,7 +35,10 @@ bool Computer::attack(Ships &player, AttackContext attackContext)
 
 	if (!isShotAttemptValid(attactCoordinates))
 	{
-		return attack(player, getNextAttactContextOnFailedAttempt(attackContext));
+		AttackContext nextAttackContext = getNextAttactContextOnFailedAttempt(attackContext);
+		previousAttackDirection = attackDirection;
+
+		return attack(player, nextAttackContext);
 	}
 
 	if (!didHitShip(attactCoordinates, player))
@@ -63,28 +66,72 @@ bool Computer::attack(Ships &player, AttackContext attackContext)
 
 	if (AttackDirection::NONE == attackDirection)
 	{
-		return attack(player, AttackContext(AttackDirection::RIGHT, Coordinates(attactCoordinates.x + 1, attactCoordinates.y), true));
+		if (Coordinates::areValid(attactCoordinates.x + 1, attactCoordinates.y))
+		{
+			previousAttackDirection = AttackDirection::NONE;
+
+			return attack(player, AttackContext(AttackDirection::RIGHT, Coordinates(attactCoordinates.x + 1, attactCoordinates.y)));
+		}
+
+		AttackContext nextAttackContext = getNextAttactContextOnFailedAttempt(attackContext);
+		previousAttackDirection = AttackDirection::NONE;
+
+		return attack(player, nextAttackContext);
 	}
 
 	if (AttackDirection::RIGHT == attackDirection)
 	{
-		return attack(player, AttackContext(AttackDirection::RIGHT, Coordinates(attactCoordinates.x + 1, attactCoordinates.y), true));
+		if (Coordinates::areValid(attactCoordinates.x + 1, attactCoordinates.y))
+		{
+			previousAttackDirection = AttackDirection::RIGHT;
+
+			return attack(player, AttackContext(AttackDirection::RIGHT, Coordinates(attactCoordinates.x + 1, attactCoordinates.y)));
+		}
+
+		AttackContext nextAttackContext = getNextAttactContextOnFailedAttempt(attackContext);
+		previousAttackDirection = AttackDirection::RIGHT;
+
+		return attack(player, nextAttackContext);
 	}
 
 	if (AttackDirection::DOWN == attackDirection)
 	{
-		return attack(player, AttackContext(AttackDirection::DOWN, Coordinates(attactCoordinates.x, attactCoordinates.y + 1), true));
+		if (Coordinates::areValid(attactCoordinates.x, attactCoordinates.y + 1))
+		{
+			previousAttackDirection = AttackDirection::DOWN;
+
+			return attack(player, AttackContext(AttackDirection::DOWN, Coordinates(attactCoordinates.x, attactCoordinates.y + 1)));
+		}
+
+		AttackContext nextAttackContext = getNextAttactContextOnFailedAttempt(attackContext);
+		previousAttackDirection = AttackDirection::DOWN;
+
+		return attack(player, nextAttackContext);
 	}
 
 	if (AttackDirection::LEFT == attackDirection)
 	{
-		return attack(player, AttackContext(AttackDirection::LEFT, Coordinates(attactCoordinates.x - 1, attactCoordinates.y), true));
+		if (Coordinates::areValid(attactCoordinates.x - 1, attactCoordinates.y))
+		{
+			previousAttackDirection = AttackDirection::LEFT;
+
+			return attack(player, AttackContext(AttackDirection::LEFT, Coordinates(attactCoordinates.x - 1, attactCoordinates.y)));
+		}
+
+		AttackContext nextAttackContext = getNextAttactContextOnFailedAttempt(attackContext);
+		previousAttackDirection = AttackDirection::LEFT;
+
+		return attack(player, nextAttackContext);
 	}
 
-	if (AttackDirection::LEFT == attackDirection)
+	if (Coordinates::areValid(attactCoordinates.x, attactCoordinates.y - 1))
 	{
-		return attack(player, AttackContext(AttackDirection::LEFT, Coordinates(attactCoordinates.x, attactCoordinates.y - 1), true));
+		previousAttackDirection = AttackDirection::UP;
+
+		return attack(player, AttackContext(AttackDirection::UP, Coordinates(attactCoordinates.x, attactCoordinates.y - 1)));
 	}
+
+	previousAttackDirection = AttackDirection::NONE;
 
 	return attack(player, getDefaultAttackContext());
 }
@@ -118,25 +165,47 @@ AttackContext Computer::getNextAttactContextOnFailedAttempt(AttackContext curren
 {
 	Coordinates attactCoordinates = currentAttackContext.shotCoordinates;
 	AttackDirection attackDirection = currentAttackContext.attackDirection;
-	bool continueAttackInSameDirection = currentAttackContext.continueAttackInSameDirection;
 
 	if (AttackDirection::RIGHT == attackDirection)
 	{
-		return continueAttackInSameDirection
-				   ? AttackContext(AttackDirection::LEFT, Coordinates(attactCoordinates.x - 2, attactCoordinates.y), true)
-				   : AttackContext(AttackDirection::DOWN, Coordinates(attactCoordinates.x - 1, attactCoordinates.y + 1), false);
+		if (AttackDirection::RIGHT != previousAttackDirection && Coordinates::areValid(attactCoordinates.x - 1, attactCoordinates.y + 1))
+		{
+			return AttackContext(AttackDirection::DOWN, Coordinates(attactCoordinates.x - 1, attactCoordinates.y + 1));
+		}
+
+		optional<Coordinates> coordinates = getNearestValidCoordinates(Coordinates(attactCoordinates.x - 2, attactCoordinates.y), AttackDirection::LEFT);
+		if (!coordinates.has_value())
+		{
+			return getDefaultAttackContext();
+		}
+
+		return AttackContext(AttackDirection::LEFT, *coordinates);
 	}
 
 	if (AttackDirection::DOWN == attackDirection)
 	{
-		return continueAttackInSameDirection
-				   ? AttackContext(AttackDirection::UP, Coordinates(attactCoordinates.x, attactCoordinates.y - 2), true)
-				   : AttackContext(AttackDirection::DOWN, Coordinates(attactCoordinates.x - 1, attactCoordinates.y + 1), false);
+		if (AttackDirection::DOWN != previousAttackDirection && Coordinates::areValid(attactCoordinates.x - 1, attactCoordinates.y - 1))
+		{
+			return AttackContext(AttackDirection::LEFT, Coordinates(attactCoordinates.x - 1, attactCoordinates.y - 1));
+		}
+
+		optional<Coordinates> coordinates = getNearestValidCoordinates(Coordinates(attactCoordinates.x, attactCoordinates.y - 2), AttackDirection::UP);
+		if (!coordinates.has_value())
+		{
+			return getDefaultAttackContext();
+		}
+
+		return AttackContext(AttackDirection::UP, *coordinates);
 	}
 
 	if (AttackDirection::LEFT == attackDirection)
 	{
-		return AttackContext(AttackDirection::UP, Coordinates(attactCoordinates.x + 1, attactCoordinates.y - 1), true);
+		if (
+			!(AttackDirection::LEFT == previousAttackDirection || AttackDirection::RIGHT == previousAttackDirection) &&
+			Coordinates::areValid(attactCoordinates.x + 1, attactCoordinates.y - 1))
+		{
+			return AttackContext(AttackDirection::UP, Coordinates(attactCoordinates.x + 1, attactCoordinates.y - 1));
+		}
 	}
 
 	return getDefaultAttackContext();
@@ -144,5 +213,35 @@ AttackContext Computer::getNextAttactContextOnFailedAttempt(AttackContext curren
 
 AttackContext Computer::getDefaultAttackContext()
 {
-	return AttackContext(AttackDirection::NONE, getValidAttackCoordinates(), false);
+	return AttackContext(AttackDirection::NONE, getValidAttackCoordinates());
+}
+
+optional<Coordinates> Computer::getNearestValidCoordinates(Coordinates attackCoordinates, AttackDirection attackDirection)
+{
+	if (isShotAttemptValid(attackCoordinates))
+	{
+		return attackCoordinates;
+	}
+
+	if (AttackDirection::LEFT == attackDirection)
+	{
+		if (!Coordinates::areValid(attackCoordinates.x - 1, attackCoordinates.y))
+		{
+			return nullopt;
+		}
+
+		return getNearestValidCoordinates(Coordinates(attackCoordinates.x - 1, attackCoordinates.y), AttackDirection::LEFT);
+	}
+
+	if (AttackDirection::UP == attackDirection)
+	{
+		if (!Coordinates::areValid(attackCoordinates.x, attackCoordinates.y - 1))
+		{
+			return nullopt;
+		}
+
+		return getNearestValidCoordinates(Coordinates(attackCoordinates.x, attackCoordinates.y - 1), AttackDirection::LEFT);
+	}
+
+	return nullopt;
 }

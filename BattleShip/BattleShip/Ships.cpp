@@ -99,9 +99,7 @@ void Ships::automaticShipSpawn()
 
 bool Ships::isShotAttemptValid(Coordinates coordinates)
 {
-	return coordinates.x < getrows() &&
-		   coordinates.y < getcolumns() &&
-		   !(shotgrid[coordinates.y][coordinates.x] == 'X') &&
+	return !(shotgrid[coordinates.y][coordinates.x] == 'X') &&
 		   !(shotgrid[coordinates.y][coordinates.x] == '$');
 }
 

@@ -6,10 +6,9 @@ struct AttackContext
 {
     const AttackDirection attackDirection;
     const Coordinates shotCoordinates;
-    const bool continueAttackInSameDirection;
 
-    AttackContext(AttackDirection attackDirection, Coordinates shotCoordinates, bool continueAttackInSameDirection)
-        : attackDirection(attackDirection), shotCoordinates(shotCoordinates), continueAttackInSameDirection(continueAttackInSameDirection)
+    AttackContext(AttackDirection attackDirection, Coordinates shotCoordinates)
+        : attackDirection(attackDirection), shotCoordinates(shotCoordinates)
     {
     }
 };

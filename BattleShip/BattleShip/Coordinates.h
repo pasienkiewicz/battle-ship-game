@@ -4,6 +4,8 @@
 
 struct Coordinates
 {
+    static const int maxX = 10;
+    static const int maxY = 10;
     const int x;
     const int y;
 
@@ -20,6 +22,19 @@ struct Coordinates
     Coordinates(int x, int y)
         : x(x), y(y)
     {
+        if (!areValid(x, y))
+        {
+            throw std::out_of_range("Coordinates are out of valid range");
+        }
+    }
+
+public:
+    static bool areValid(int x, int y)
+    {
+        return x >= 0 &&
+               y >= 0 &&
+               x < maxX &&
+               y < maxY;
     }
 
 private:
@@ -39,14 +54,4 @@ private:
 
         throw std::invalid_argument("Invalid coordinate character");
     }
-
-    // Coordinates &operator=(const Coordinates &other)
-    // {
-    //     if (this != &other)
-    //     {
-    //         this->~Coordinates();
-    //         new (this) Coordinates(other.x, other.y);
-    //     }
-    //     return *this;
-    // }
 };
