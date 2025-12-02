@@ -101,12 +101,12 @@ bool Player::attack(Ships &computer)
         if (!didHitShip(coord, computer))
         {
             displayInfo(name + ": miss");
-            shotgrid[coord.y][coord.x] = 'X';
+            shotgrid[coord.y()][coord.x()] = 'X';
 
             return false;
         }
 
-        shotgrid[coord.y][coord.x] = '$';
+        shotgrid[coord.y()][coord.x()] = '$';
         computer.setHitChar(coord);
         if (computer.checkIfSink())
             displayInfo(name + ": oponent ship sink");
@@ -119,14 +119,14 @@ bool Player::attack(Ships &computer)
 
 bool Player::isShipCorrectSize(Coordinates firstCoordinates, Coordinates secondCoordinates, int shipSize)
 {
-    return secondCoordinates.x - firstCoordinates.x + secondCoordinates.y - firstCoordinates.y == shipSize;
+    return secondCoordinates.x() - firstCoordinates.x() + secondCoordinates.y() - firstCoordinates.y() == shipSize;
 }
 
 bool Player::getShipDirection(Coordinates firstCoordinates, Coordinates secondCoordinates)
 {
-    if (firstCoordinates.x == secondCoordinates.x)
+    if (firstCoordinates.x() == secondCoordinates.x())
         return false;
-    if (firstCoordinates.y == secondCoordinates.y)
+    if (firstCoordinates.y() == secondCoordinates.y())
         return true;
 
     throw invalid_argument("Invalid shipDirection");

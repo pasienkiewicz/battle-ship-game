@@ -17,18 +17,18 @@ Ships::Ships()
 
 char Ships::getAttackedChar(Coordinates coordinates)
 {
-	return shipgrid[0][coordinates.y][coordinates.x];
+	return shipgrid[0][coordinates.y()][coordinates.x()];
 }
 
 void Ships::setHitChar(Coordinates coordinates)
 {
-	shipgrid[0][coordinates.y][coordinates.x] = '$';
-	shipgrid[1][coordinates.y][coordinates.x] = ' ';
+	shipgrid[0][coordinates.y()][coordinates.x()] = '$';
+	shipgrid[1][coordinates.y()][coordinates.x()] = ' ';
 }
 
 void Ships::setMissChar(Coordinates coordinates)
 {
-	shipgrid[0][coordinates.y][coordinates.x] = 'X';
+	shipgrid[0][coordinates.y()][coordinates.x()] = 'X';
 }
 
 bool Ships::checkIfSink()
@@ -99,8 +99,8 @@ void Ships::automaticShipSpawn()
 
 bool Ships::isShotAttemptValid(Coordinates coordinates)
 {
-	return !(shotgrid[coordinates.y][coordinates.x] == 'X') &&
-		   !(shotgrid[coordinates.y][coordinates.x] == '$');
+	return !(shotgrid[coordinates.y()][coordinates.x()] == 'X') &&
+		   !(shotgrid[coordinates.y()][coordinates.x()] == '$');
 }
 
 void Ships::setShip(Coordinates coordinates, bool direction, int shipSize, char shipType)
@@ -111,19 +111,19 @@ void Ships::setShip(Coordinates coordinates, bool direction, int shipSize, char 
 	else
 		goesDown = shipSize;
 
-	for (int i = coordinates.y; i <= coordinates.y + goesDown; i++)
+	for (int i = coordinates.y(); i <= coordinates.y() + goesDown; i++)
 	{
-		for (int j = coordinates.x; j <= coordinates.x + goesRight; j++)
+		for (int j = coordinates.x(); j <= coordinates.x() + goesRight; j++)
 		{
 			if (advancedShipSpawn)
 			{
-				if (coordinates.y - 1 != -1)
+				if (coordinates.y() - 1 != -1)
 					spawngrid[i - 1][j] = 'O';
-				if (coordinates.x - 1 != -1)
+				if (coordinates.x() - 1 != -1)
 					spawngrid[i][j - 1] = 'O';
-				if (coordinates.y + 1 != 10)
+				if (coordinates.y() + 1 != 10)
 					spawngrid[i + 1][j] = 'O';
-				if (coordinates.x + 1 != 10)
+				if (coordinates.x() + 1 != 10)
 					spawngrid[i][j + 1] = 'O';
 			}
 			shipgrid[0][i][j] = 'O';
@@ -146,9 +146,9 @@ bool Ships::isShipPlacedInCorrectPossition(Coordinates coordinates, bool directi
 	else
 		goesDown = shipSize;
 
-	for (int i = coordinates.y; i <= coordinates.y + goesDown; i++)
+	for (int i = coordinates.y(); i <= coordinates.y() + goesDown; i++)
 	{
-		for (int j = coordinates.x; j <= coordinates.x + goesRight; j++)
+		for (int j = coordinates.x(); j <= coordinates.x() + goesRight; j++)
 		{
 			if (advancedShipSpawn)
 			{

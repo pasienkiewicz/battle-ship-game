@@ -1,34 +1,43 @@
 #pragma once
-#include <cctype>
-#include <stdexcept>
+
+using std::invalid_argument;
+using std::isdigit;
+using std::string;
+using std::tolower;
 
 struct Coordinates
 {
+public:
     static const int maxX = 10;
     static const int maxY = 10;
-    const int x;
-    const int y;
 
-    Coordinates(const std::string &coordinates)
-        : x(transformCharToInt(coordinates.at(0))),
-          y(transformCharToInt(coordinates.at(1)))
+private:
+    int xx;
+    int yy;
+
+public:
+    Coordinates(const string &coordinates)
+        : xx(transformCharToInt(coordinates.at(0))),
+          yy(transformCharToInt(coordinates.at(1)))
     {
         if (2 != coordinates.size())
         {
-            throw std::invalid_argument("Coordinates string must have 2 characters");
+            throw invalid_argument("Coordinates string must have 2 characters");
         }
     }
 
     Coordinates(int x, int y)
-        : x(x), y(y)
+        : xx(x), yy(y)
     {
         if (!areValid(x, y))
         {
-            throw std::out_of_range("Coordinates are out of valid range");
+            throw out_of_range("Coordinates are out of valid range");
         }
     }
 
-public:
+    int x() const { return xx; }
+    int y() const { return yy; }
+
     static bool areValid(int x, int y)
     {
         return x >= 0 &&
@@ -40,9 +49,9 @@ public:
 private:
     int transformCharToInt(char character)
     {
-        character = std::tolower(character);
+        character = tolower(character);
 
-        if (std::isdigit(character))
+        if (isdigit(character))
         {
             return character - '0';
         }
@@ -52,6 +61,6 @@ private:
             return character - 'a';
         }
 
-        throw std::invalid_argument("Invalid coordinate character");
+        throw invalid_argument("Invalid coordinate character");
     }
 };

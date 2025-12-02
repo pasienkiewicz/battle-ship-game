@@ -1,6 +1,10 @@
 #pragma once
 #include <iostream>
 
+using std::cin;
+using std::cout;
+using std::string;
+
 class IO
 {
 public:
@@ -17,7 +21,7 @@ public:
     static void setYellow();
     static void setRed();
     static void clearScreen();
-    static std::string askForInput(const std::string &question);
+    static string askForInput(const string &question);
 
 private:
     static void setColor(int colorCode);

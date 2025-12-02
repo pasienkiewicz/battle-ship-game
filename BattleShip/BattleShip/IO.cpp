@@ -27,19 +27,19 @@ void IO::setRed()
 
 void IO::clearScreen()
 {
-    std::cout << "\033[2J\033[1;1H";
+    cout << "\033[2J\033[1;1H";
 }
 
 void IO::setColor(int colorCode)
 {
-    std::cout << "\033[" << colorCode << "m";
+    cout << "\033[" << colorCode << "m";
 }
 
-std::string IO::askForInput(const std::string &question)
+string IO::askForInput(const string &question)
 {
-    std::string answer;
-    std::cout << question;
-    std::cin >> answer;
+    string answer;
+    cout << question;
+    cin >> answer;
 
     return answer;
 }
